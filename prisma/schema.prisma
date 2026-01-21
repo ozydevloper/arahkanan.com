@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoleUser {
+  ADMIN
+  USER
+}
+
+model Agenda {
+  id String @unique @default(uuid())
+
+  image_public_id String
+  image_url       String
+  title           String
+  description     String
+  date            DateTime
+  time            String
+  activity_time   String
+
+  pembicara     String?
+  penyelenggara String?
+
+  on String
+
+  location_detail String?
+  location_url    String?
+
+  via_name String?
+  via_link String?
+
+  kota_relation Kota?   @relation(fields: [kota_name], references: [name])
+  kota_name     String?
+
+  kategori_relation Kategori @relation(fields: [kategori_name], references: [name])
+  kategori_name     String
+
+  topik_relation Topik  @relation(fields: [topik_name], references: [name])
+  topik_name     String
+
+  biaya_relation Biaya  @relation(fields: [biaya_name], references: [name])
+  biaya_name     String
+
+  kalangan_relation Kalangan @relation(fields: [kalangan_name], references: [name])
+  kalangan_name     String
+
+  published Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+model Kota {
+  id     String   @unique @default(uuid())
+  name   String   @unique
+  agenda Agenda[]
+
+  createdAt DateTime @default(now())
+}
+
+model Kategori {
+  id     String   @unique @default(uuid())
+  name   String   @unique
+  agenda Agenda[]
+
+  createdAt DateTime @unique @default(now())
+}
+
+model Topik {
+  id     String   @unique @default(uuid())
+  name   String   @unique
+  agenda Agenda[]
+
+  createdAt DateTime @default(now())
+}
+
+model Biaya {
+  id     String   @unique @default(uuid())
+  name   String   @unique
+  agenda Agenda[]
+
+  createdAt DateTime @default(now())
+}
+
+model Kalangan {
+  id     String   @unique @default(uuid())
+  name   String   @unique
+  agenda Agenda[]
+
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id    String @unique @default(uuid())
+  name  String
+  email String
+  image String
+
+  createdAt DateTime @default(now())
+}
