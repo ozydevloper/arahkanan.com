@@ -277,6 +277,7 @@ export async function getSomeAgendas(optionGetAgendas: RequestAgendaGet) {
         date: {
           gte: hariIni.gt,
         },
+        published: true,
       },
     }),
   });
@@ -289,6 +290,7 @@ export async function getSomeAgendas(optionGetAgendas: RequestAgendaGet) {
         date: {
           gte: hariIni.gt,
         },
+        published: true,
       },
     }),
   });
@@ -322,6 +324,7 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
       date: {
         gte: hariIni.gt,
       },
+      published: true,
       AND: {
         ...(optionGetAgendas.title && {
           title: {
@@ -367,6 +370,7 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
       date: {
         gte: hariIni.gt,
       },
+      published: true,
       AND: {
         ...(optionGetAgendas.title && {
           title: {
@@ -432,11 +436,12 @@ export async function createAgenda(
       penyelenggara: newAgenda.penyelenggara,
       via_link: newAgenda.via_link,
       via_name: newAgenda.via_name,
+      published: newAgenda.published,
     },
   });
 }
 
-export async function updateAgenda(agenda: RequestAgendaUpdate) {
+export async function updateAgenda(agenda: Omit<RequestAgendaUpdate, "image">) {
   return await prisma.agenda.update({
     where: {
       id: agenda.id,
@@ -488,6 +493,11 @@ export async function updateAgenda(agenda: RequestAgendaUpdate) {
           image_public_id: agenda.image_public_id,
           image_url: agenda.image_url,
         }),
+
+      ...(agenda.published && {
+        published:
+          agenda.published === "1" ? true : agenda.published === "0" && false,
+      }),
     },
   });
 }
@@ -508,6 +518,7 @@ export async function getAgendaHariIni(optionGetAgendas: RequestAgendaGet) {
         gte: hariIni.gt,
         lt: hariIni.lt,
       },
+      published: true,
     },
   });
   const totalAgenda = await prisma.agenda.count({
@@ -519,6 +530,7 @@ export async function getAgendaHariIni(optionGetAgendas: RequestAgendaGet) {
         gte: hariIni.gt,
         lt: hariIni.lt,
       },
+      published: true,
     },
   });
   return {
@@ -543,6 +555,7 @@ export async function getAgendaMingguIni(optionGetAgendas: RequestAgendaGet) {
         gte: hariIni.gt,
         lte: hariIni.lt,
       },
+      published: true,
     },
   });
   const totalAgenda = await prisma.agenda.count({
@@ -554,6 +567,7 @@ export async function getAgendaMingguIni(optionGetAgendas: RequestAgendaGet) {
         gte: hariIni.gt,
         lte: hariIni.lt,
       },
+      published: true,
     },
   });
   return {

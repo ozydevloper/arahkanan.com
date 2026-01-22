@@ -1,4 +1,5 @@
 import { Prisma } from "@/app/generated/prisma/client";
+import { User } from "next-auth";
 import { create } from "zustand";
 
 type AgendaType = {
@@ -51,4 +52,14 @@ export const useAgendas = create<AgendaType>((set) => ({
   onUpdate: null,
   setOnUpadate: (agenda: null | Prisma.AgendaGetPayload<object>) =>
     set({ onUpdate: agenda }),
+}));
+
+type UserType = {
+  dataUser: User | null;
+  setDataUser: (dataUser: User | null) => void;
+};
+
+export const useUserSession = create<UserType>((set) => ({
+  dataUser: null,
+  setDataUser: (dataUser: User | null) => set({ dataUser: dataUser }),
 }));

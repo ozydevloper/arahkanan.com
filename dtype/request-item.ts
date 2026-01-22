@@ -62,6 +62,7 @@ export interface RequestAgendaCreate {
   topik_name: string;
   biaya_name: string;
   kalangan_name: string;
+  published: boolean;
 }
 
 export interface RequestAgendaUpdate {
@@ -94,4 +95,6 @@ export interface RequestAgendaUpdate {
   biaya_name?: string | null;
 
   kalangan_name?: string | null;
+
+  published?: string | null;
 }

@@ -5,20 +5,39 @@ import {
   PopUpDeleteAgenda,
 } from "@/components/core-ui-new/content/content";
 import { Portal } from "@/components/core-ui-new/portal";
-import { Toaster } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
-import { useAgendas } from "./zustand";
+import { useEffect, useState } from "react";
+import { useAgendas, useUserSession } from "./zustand";
 import { UpdateAgenda } from "@/components/core-ui-new/topbar/updateAgenda";
+import { useSession } from "next-auth/react";
+import { CreateAgenda } from "@/components/core-ui-new/topbar/createAgenda";
 
 export default function Providers({
   children,
 }: {
   children?: React.ReactNode;
 }) {
+  const session = useSession();
+
   const onDetail = useAgendas((state) => state.onDetail);
   const onDelete = useAgendas((state) => state.onDelete);
+  const onCreate = useAgendas((state) => state.onCreate);
   const onUpdate = useAgendas((state) => state.onUpdate);
+
+  const setOnCreate = useAgendas((state) => state.setOnCreate);
+  const setDataUser = useUserSession((state) => state.setDataUser);
+  const dataUser = useUserSession((state) => state.dataUser);
+
+  useEffect(() => {
+    function updateUser() {
+      if (session.data) {
+        if (session.data.user) {
+          setDataUser(session.data.user);
+        }
+      }
+    }
+    updateUser();
+  }, [session.data, setDataUser]);
 
   const [queryClient] = useState(
     () =>
@@ -33,16 +52,26 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
+      {dataUser && dataUser.id && (
+        <>
+          <Portal onOpen={onCreate}>
+            <CreateAgenda
+              onClick={() => setOnCreate(!onCreate)}
+              onCreate={onCreate}
+            />
+          </Portal>
+
+          <Portal onOpen={!!onDelete}>
+            {onDelete && <PopUpDeleteAgenda agenda={onDelete} />}
+          </Portal>
+
+          <Portal onOpen={!!onUpdate}>
+            {!!onUpdate && <UpdateAgenda agenda={onUpdate} />}
+          </Portal>
+        </>
+      )}
       <Portal onOpen={!!onDetail}>
         {onDetail && <DetailAgenda agenda={onDetail} />}
-      </Portal>
-
-      <Portal onOpen={!!onDelete}>
-        {onDelete && <PopUpDeleteAgenda agenda={onDelete} />}
-      </Portal>
-
-      <Portal onOpen={!!onUpdate}>
-        {!!onUpdate && <UpdateAgenda agenda={onUpdate} />}
       </Portal>
 
       {children}

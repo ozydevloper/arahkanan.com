@@ -1,3 +1,5 @@
+import { auth } from "@/auth";
+import prisma from "@/DB/db";
 import { RequestAgendaCreate } from "@/dtype/request-item";
 import { createAgenda } from "@/lib/api-request";
 import { UploadImage } from "@/lib/imageOperation";
@@ -6,11 +8,27 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
+    const session = await auth();
+    if (!!!session) throw new Error();
+    if (!!!session.user) throw new Error();
+
+    const pembuat = await prisma.user.findFirst({
+      where: {
+        id: session.user.id,
+      },
+    });
+    if (!!!pembuat) throw new Error();
+    const published: boolean =
+      pembuat.role === "SUDO"
+        ? true
+        : pembuat.role === "SUPERUSER"
+          ? false
+          : false;
 
     const image = formData.get("image") as File;
     const { public_id, secure_url } = await UploadImage(image);
 
-    const agenda: Omit<RequestAgendaCreate, "image"> = {
+    const agenda: Omit<RequestAgendaCreate, "image" | "id_pembuat"> = {
       kategori_name: formData.get("kategori_name") as string,
       topik_name: formData.get("topik_name") as string,
       activity_time: formData.get("activity_time") as string,
@@ -30,6 +48,7 @@ export async function POST(req: NextRequest) {
       title: formData.get("title") as string,
       via_link: formData.get("via_link") as string | null,
       via_name: formData.get("via_name") as string | null,
+      published: published,
     };
 
     const newAgenda = await createAgenda(

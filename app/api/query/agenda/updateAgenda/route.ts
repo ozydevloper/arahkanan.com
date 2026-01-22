@@ -1,3 +1,5 @@
+import { auth } from "@/auth";
+import prisma from "@/DB/db";
 import { RequestAgendaUpdate } from "@/dtype/request-item";
 import { updateAgenda } from "@/lib/api-request";
 import { DeleteImage, UploadImage } from "@/lib/imageOperation";
@@ -6,6 +8,18 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(req: NextRequest) {
   try {
     const formData = await req.formData();
+    const session = await auth();
+    if (!!!session) throw new Error();
+    if (!!!session.user) throw new Error();
+
+    const cekSudo = await prisma.user.findFirst({
+      where: {
+        id: session.user.id,
+      },
+    });
+    if (!!!cekSudo) throw new Error();
+    if (cekSudo.role !== "SUDO") throw new Error();
+
     let image_public_id = null;
     let image_url = null;
     const agenda_public_id = formData.get("image_public_id") as string;
@@ -44,6 +58,8 @@ export async function PUT(req: NextRequest) {
       via_link: formData.get("via_link") as string | null,
       via_name: formData.get("via_name") as string | null,
       id: formData.get("id") as string,
+
+      published: formData.get("published") as string | null,
     };
 
     const updatedAgenda = await updateAgenda(agenda);

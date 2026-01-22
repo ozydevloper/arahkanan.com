@@ -6,7 +6,9 @@ import { apiFetch } from "@/lib/signature";
 import { useQuery, UseQueryResult, useMutation } from "@tanstack/react-query";
 import { Loader, RefreshCcw, X } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAgendas } from "@/lib/zustand";
+import { useAgendas, useUserSession } from "@/lib/zustand";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export const ItemLoading = () => {
   return (
@@ -55,12 +57,13 @@ export const CreateAgenda = ({
   onCreate: boolean;
 }) => {
   const setOnCreate = useAgendas((state) => state.setOnCreate);
+
   const {
     register,
     handleSubmit,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RequestAgendaCreate>({
     defaultValues: {
       on: "1",

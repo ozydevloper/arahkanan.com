@@ -4,7 +4,7 @@ import { ApiResponse } from "@/dtype/api_response";
 import { apiFetch } from "@/lib/signature";
 import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { LoadingContentIcon, StateContent } from "./stateContent";
-import { useAgendas } from "@/lib/zustand";
+import { useAgendas, useUserSession } from "@/lib/zustand";
 import Image from "next/image";
 import {
   BookOpen,
@@ -171,6 +171,7 @@ export const DetailAgenda = ({
   const setOnDetail = useAgendas((state) => state.setOnDetail);
   const setOnDelete = useAgendas((state) => state.setOnDelete);
   const setOnUpdate = useAgendas((state) => state.setOnUpadate);
+  const dataUser = useUserSession((state) => state.dataUser);
 
   return (
     <div className="w-full h-fit rounded-b-2xl flex flex-col items-center justify-start bg-primary-foreground overflow-y-auto relative">
@@ -199,18 +200,22 @@ export const DetailAgenda = ({
 
       <div className="w-full items-center px-3 md:px-25">
         <div className="w-full flex items-center justify-start gap-x-2 my-3">
-          <div
-            onClick={() => setOnUpdate(agenda)}
-            className="px-3 py-2 bg-green-500 text-white rounded-xl "
-          >
-            Update
-          </div>
-          <div
-            onClick={() => setOnDelete(agenda)}
-            className="px-3 py-2 bg-red-500 text-white rounded-xl "
-          >
-            Delete
-          </div>
+          {dataUser && dataUser.role === "SUDO" && (
+            <>
+              <div
+                onClick={() => setOnUpdate(agenda)}
+                className="px-3 py-2 bg-green-500 text-white rounded-xl "
+              >
+                Update
+              </div>
+              <div
+                onClick={() => setOnDelete(agenda)}
+                className="px-3 py-2 bg-red-500 text-white rounded-xl "
+              >
+                Delete
+              </div>
+            </>
+          )}
         </div>
         <div className="w-full flex items-center justify-between py-2">
           <div className="px-3 py-1 text-sm bg-green-200 text-green-500 border-green-100 rounded-2xl">

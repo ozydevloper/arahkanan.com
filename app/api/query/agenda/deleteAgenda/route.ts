@@ -1,3 +1,5 @@
+import { auth } from "@/auth";
+import prisma from "@/DB/db";
 import { RequestAgendaDelete } from "@/dtype/request-item";
 import { deletedAgendaById } from "@/lib/api-request";
 import { DeleteImage } from "@/lib/imageOperation";
@@ -5,6 +7,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(req: NextRequest) {
   try {
+    const session = await auth();
+    if (!!!session) throw new Error();
+    if (!!!session.user?.id) throw new Error();
+
+    const cekSudo = await prisma.user.findFirst({
+      where: {
+        id: session.user.id,
+      },
+    });
+    if (!!!cekSudo) throw new Error();
+    if (cekSudo.role !== "SUDO") throw new Error();
+
     const body = (await req.json()) as RequestAgendaDelete;
     const deletedAgenda = await deletedAgendaById(body);
     const deletedImage = await DeleteImage(deletedAgenda.image_public_id);

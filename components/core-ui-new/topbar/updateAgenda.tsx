@@ -30,7 +30,6 @@ const RefetchItem = ({
 export const UpdateAgenda = ({
   agenda,
 }: {
-  onClick: () => void;
   agenda: Prisma.AgendaGetPayload<object>;
 }) => {
   const setOnUpdate = useAgendas((state) => state.setOnUpadate);
@@ -65,6 +64,8 @@ export const UpdateAgenda = ({
       topik_name: agenda.topik_name,
       via_link: agenda.via_link,
       via_name: agenda.via_name,
+
+      published: agenda.published ? "1" : "0",
     },
   });
 
@@ -158,6 +159,19 @@ export const UpdateAgenda = ({
         className="w-full md:w-xl flex justify-start flex-col items-start gap-y-7"
       >
         <span className="text-lg font-extrabold my-5">Update Acara</span>
+        <div className="flex items-start justify-start w-full flex-col">
+          <label htmlFor="published" className={`text-sm font-bold `}>
+            Publish
+          </label>
+          <select
+            id="published"
+            {...register("published")}
+            className="outline-none transition-all ease-in-out duration-200 shadow-md px-3 py-1 rounded-md text-sm font-bold "
+          >
+            <option value={"0"}>Jangan Publish</option>{" "}
+            <option value={"1"}>Publish</option>
+          </select>
+        </div>
         <div className="flex items-start justify-start w-full flex-col">
           <label htmlFor="on" className={`text-sm font-bold `}>
             Pelaksanaan
