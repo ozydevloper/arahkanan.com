@@ -19,7 +19,7 @@ export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
     <div>
       {queryAgenda.isLoading ? (
         <Loading />
-      ) : queryAgenda.isError || !queryAgenda.data?.success ? (
+      ) : queryAgenda.isError || !queryAgenda.data?.data.data ? (
         <Loading />
       ) : (
         queryAgenda.isSuccess && (

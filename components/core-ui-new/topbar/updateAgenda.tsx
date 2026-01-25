@@ -242,7 +242,7 @@ export const UpdateAgenda = ({
             htmlFor="date"
             className={`text-sm font-bold ${errors.date ? "text-red-300" : ""}`}
           >
-            Tanggal - {formatDate(new Date(watch("date")))}
+            Tanggal - {formatDate(new Date(watch("date") ?? ""))}
           </label>
           <input
             type="date"
@@ -280,7 +280,7 @@ export const UpdateAgenda = ({
           />
         </div>
 
-        {watch("on").toString() === "1" ? (
+        {watch("on")!.toString() === "1" ? (
           <div className="flex items-start justify-start w-full flex-col">
             <label
               htmlFor="location_detail"

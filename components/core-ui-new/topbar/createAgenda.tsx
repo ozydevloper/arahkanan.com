@@ -6,9 +6,7 @@ import { apiFetch } from "@/lib/signature";
 import { useQuery, UseQueryResult, useMutation } from "@tanstack/react-query";
 import { Loader, RefreshCcw, X } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAgendas, useUserSession } from "@/lib/zustand";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useAgendas } from "@/lib/zustand";
 import { toast } from "sonner";
 
 export const ItemLoading = () => {

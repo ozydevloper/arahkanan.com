@@ -75,69 +75,72 @@ const ListUser = ({
           </span>
         </div>
       ) : (
-        <>
-          <div className="w-full flex items-center justify-center flex-wrap gap-5 ">
-            {queryUser.data.data.data.map((e, i) => (
-              <div
-                onClick={() => setUpdateUser(e)}
-                className="bg-primary w-40 h-40 rounded-xl relative overflow-hidden"
-                key={i}
-              >
-                {e.image && (
-                  <Image
-                    fill
-                    alt="..."
-                    src={e.image}
-                    className="object-cover absolute z-1"
-                  />
-                )}
-                <div className="w-full max-w-40 h-full bg-black/50 z-2 absolute flex flex-col items-center justify-start pt-2">
-                  <p className="w-35 flex flex-wrap items-start justify-start text-white font-extrabold text-lg wrap-anywhere pb-1">
-                    {e.name}
-                  </p>
-                  <p className="w-35 flex flex-wrap items-start justify-start text-white  text-xs wrap-anywhere font-bold">
-                    {e.email}
-                  </p>
-                  <p className="w-35 flex flex-wrap items-start justify-start text-white  text-[0.6rem] wrap-anywhere">
-                    {e.role}
-                  </p>
-                  <p className="w-35 flex flex-wrap items-start justify-start text-white  text-[0.6rem] wrap-anywhere">
-                    Bergabung: {formatDate(new Date(e.createdAt))}
-                  </p>
+        queryUser.isSuccess &&
+        queryUser.data.success && (
+          <>
+            <div className="w-full flex items-center justify-center flex-wrap gap-5 ">
+              {queryUser.data.data.data.map((e, i) => (
+                <div
+                  onClick={() => setUpdateUser(e)}
+                  className="bg-primary w-40 h-40 rounded-xl relative overflow-hidden"
+                  key={i}
+                >
+                  {e.image && (
+                    <Image
+                      fill
+                      alt="..."
+                      src={e.image}
+                      className="object-cover absolute z-1"
+                    />
+                  )}
+                  <div className="w-full max-w-40 h-full bg-black/50 z-2 absolute flex flex-col items-center justify-start pt-2">
+                    <p className="w-35 flex flex-wrap items-start justify-start text-white font-extrabold text-lg wrap-anywhere pb-1">
+                      {e.name}
+                    </p>
+                    <p className="w-35 flex flex-wrap items-start justify-start text-white  text-xs wrap-anywhere font-bold">
+                      {e.email}
+                    </p>
+                    <p className="w-35 flex flex-wrap items-start justify-start text-white  text-[0.6rem] wrap-anywhere">
+                      {e.role}
+                    </p>
+                    <p className="w-35 flex flex-wrap items-start justify-start text-white  text-[0.6rem] wrap-anywhere">
+                      Bergabung: {formatDate(new Date(e.createdAt))}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className=" flex items-center justify-center text-center w-full md:w-md gap-x-5 my-10">
-            <button
-              disabled={!queryUser.isSuccess}
-              className={` py-0.5 font-bold flex-1 rounded-md transition-all ease-in-out duration-200 ${pageUser <= 1 || !queryUser.isSuccess ? "text-muted bg-muted-foreground" : "bg-primary text-white"}`}
-              onClick={() => {
-                if (pageUser <= 1) return;
-                setPageUser(pageUser - 1);
-                queryUser.refetch();
-              }}
-            >
-              Sebelumnya
-            </button>
-            <span className="shrink-0">
-              {pageUser} /{Math.ceil(queryUser.data?.data.total / 10)}
-            </span>
+              ))}
+            </div>
+            <div className=" flex items-center justify-center text-center w-full md:w-md gap-x-5 my-10">
+              <button
+                disabled={!queryUser.isSuccess}
+                className={` py-0.5 font-bold flex-1 rounded-md transition-all ease-in-out duration-200 ${pageUser <= 1 || !queryUser.isSuccess ? "text-muted bg-muted-foreground" : "bg-primary text-white"}`}
+                onClick={() => {
+                  if (pageUser <= 1) return;
+                  setPageUser(pageUser - 1);
+                  queryUser.refetch();
+                }}
+              >
+                Sebelumnya
+              </button>
+              <span className="shrink-0">
+                {pageUser} /{Math.ceil(queryUser.data?.data.total / 10)}
+              </span>
 
-            <button
-              disabled={!queryUser.isSuccess}
-              className={` py-0.5 font-bold flex-1 rounded-md transition-all ease-in-out duration-200 ${pageUser >= Math.ceil(queryUser.data?.data.total / 10) || !queryUser.isSuccess ? "text-muted bg-muted-foreground" : "bg-primary text-white"}`}
-              onClick={() => {
-                if (pageUser >= Math.ceil(queryUser.data?.data.total / 10))
-                  return;
-                setPageUser(pageUser + 1);
-                queryUser.refetch();
-              }}
-            >
-              Selanjutnya
-            </button>
-          </div>
-        </>
+              <button
+                disabled={!queryUser.isSuccess}
+                className={` py-0.5 font-bold flex-1 rounded-md transition-all ease-in-out duration-200 ${pageUser >= Math.ceil(queryUser.data?.data.total / 10) || !queryUser.isSuccess ? "text-muted bg-muted-foreground" : "bg-primary text-white"}`}
+                onClick={() => {
+                  if (pageUser >= Math.ceil(queryUser.data?.data.total / 10))
+                    return;
+                  setPageUser(pageUser + 1);
+                  queryUser.refetch();
+                }}
+              >
+                Selanjutnya
+              </button>
+            </div>
+          </>
+        )
       )}
     </div>
   );
@@ -154,7 +157,7 @@ const ListItem = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const tambahItemRef = useRef(null);
+  const tambahItemRef = useRef<HTMLInputElement>(null);
   const [prosesItemIdUpdate, setProsesItemIdUpdate] = useState<string | null>(
     null,
   );
@@ -193,14 +196,14 @@ const ListItem = ({
         },
       ).then((e) => e.json()),
     onSettled: () => setProsesItemIdUpdate(null),
-    onSuccess: (e) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [children?.toString().toLowerCase()],
       });
     },
   });
 
-  const handleButtonCreate = (e) => {
+  const handleButtonCreate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (tambahItemRef.current!.value.trim() === "") return;
     const newName = tambahItemRef.current!.value;
@@ -334,11 +337,11 @@ export default function Page() {
   const queryClient = useQueryClient();
 
   const [onEditItem, setOnEditItem] = useState<UseMutationResult | null>(null);
-  const updateItemRef = useRef(null);
+  const updateItemRef = useRef<HTMLInputElement>(null);
 
   const updateUser = useUserSession((state) => state.updateUser);
   const setUpdateUser = useUserSession((state) => state.setUpdateUser);
-  const refUserUpdate = useRef(null);
+  const refUserUpdate = useRef<HTMLSelectElement>(null);
 
   const batchContent = 10;
   const [pageContent, setPageContent] = useState<number>(1);
@@ -559,7 +562,11 @@ export default function Page() {
                       setOnEditItem(null);
                       toast("Pesan", {
                         closeButton: true,
-                        description: e.message,
+                        description:
+                          typeof e === "object" &&
+                          e !== null &&
+                          "message" in e &&
+                          (e.message as string),
                       });
                     });
                   updateItemRef.current!.value = "";

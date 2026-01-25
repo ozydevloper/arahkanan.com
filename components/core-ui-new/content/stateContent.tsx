@@ -5,8 +5,6 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { Prisma } from "@/app/generated/prisma/client";
 import { ApiResponse } from "@/dtype/api_response";
 import { CardAgenda } from "./cardAgenda";
-import { useAgendas } from "@/lib/zustand";
-import { Dispatch, SetStateAction, useEffect } from "react";
 
 const CardLoading = () => {
   return (

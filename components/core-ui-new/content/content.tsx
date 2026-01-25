@@ -28,8 +28,7 @@ import {
 import { formatDate } from "@/lib/formatDate";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { RequestAgendaDelete, RequestAgendaUpdate } from "@/dtype/request-item";
-import { useSession } from "next-auth/react";
+import { RequestAgendaDelete } from "@/dtype/request-item";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 

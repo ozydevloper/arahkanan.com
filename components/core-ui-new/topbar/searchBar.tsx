@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ClassNameValue } from "tailwind-merge";
 import { Portal } from "../portal";
 import LogoApp from "../logo-app";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ApiResponse } from "@/dtype/api_response";
 import { Prisma } from "@/app/generated/prisma/client";
 import { apiFetch } from "@/lib/signature";
@@ -11,17 +11,6 @@ import { ContentAgenda } from "../content/content";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RequestAgendaSearch } from "@/dtype/request-item";
 import { ItemErorr, ItemLoading } from "./createAgenda";
-
-const RefetchItem = ({ refetch }: { refetch: UseQueryResult }) => {
-  return (
-    <div
-      onClick={() => refetch.refetch()}
-      className="px-2 py-0.5 bg-primary text-white rounded-md text-xs"
-    >
-      Coba lagi
-    </div>
-  );
-};
 
 export default function SearchBar({
   className,
@@ -102,7 +91,7 @@ export default function SearchBar({
 
   useEffect(() => {
     const handleCloseFilter = (e: PointerEvent) => {
-      if (e.target?.id === "back") {
+      if ((e.target as HTMLElement).id === "back") {
         setOnFilter(false);
       }
     };
