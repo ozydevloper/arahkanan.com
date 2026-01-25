@@ -23,6 +23,9 @@ type AgendaType = {
 
   onDelete: null | Prisma.AgendaGetPayload<object>;
   setOnDelete: (agenda: Prisma.AgendaGetPayload<object> | null) => void;
+
+  onPublishing: boolean;
+  setOnPublishing: (state: boolean) => void;
 };
 
 export const useAgendas = create<AgendaType>((set) => ({
@@ -52,14 +55,24 @@ export const useAgendas = create<AgendaType>((set) => ({
   onUpdate: null,
   setOnUpadate: (agenda: null | Prisma.AgendaGetPayload<object>) =>
     set({ onUpdate: agenda }),
+
+  onPublishing: false,
+  setOnPublishing: (state) => set({ onPublishing: state }),
 }));
 
 type UserType = {
   dataUser: User | null;
   setDataUser: (dataUser: User | null) => void;
+
+  updateUser: null | Prisma.UserGetPayload<object>;
+  setUpdateUser: (user: null | Prisma.UserGetPayload<object>) => void;
 };
 
 export const useUserSession = create<UserType>((set) => ({
   dataUser: null,
   setDataUser: (dataUser: User | null) => set({ dataUser: dataUser }),
+
+  updateUser: null,
+  setUpdateUser: (user: null | Prisma.UserGetPayload<object>) =>
+    set({ updateUser: user }),
 }));

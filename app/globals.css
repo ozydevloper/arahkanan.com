@@ -177,6 +177,6 @@
     @apply border-border font-sans select-none;
   }
   body {
-    @apply bg-primary-foreground  text-foreground;
+    @apply bg-primary-foreground  text-foreground scroll-smooth;
   }
 }

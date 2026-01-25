@@ -2,7 +2,12 @@
 import { Prisma } from "@/app/generated/prisma/client";
 import { ApiResponse } from "@/dtype/api_response";
 import { apiFetch } from "@/lib/signature";
-import { useMutation, useQuery, UseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { LoadingContentIcon, StateContent } from "./stateContent";
 import { useAgendas, useUserSession } from "@/lib/zustand";
 import Image from "next/image";
@@ -23,7 +28,10 @@ import {
 import { formatDate } from "@/lib/formatDate";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { RequestAgendaDelete } from "@/dtype/request-item";
+import { RequestAgendaDelete, RequestAgendaUpdate } from "@/dtype/request-item";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const Tab = ({
   children,
@@ -83,7 +91,7 @@ export const PopUpDeleteAgenda = ({
               mutationDeleteAgenda.mutateAsync({ id: agenda.id }).then((e) => {
                 setOnDelete(null);
                 setOnDetail(null);
-                alert(JSON.stringify(e));
+                toast("Pesan", { description: e.message, closeButton: true });
               })
             }
             className={`flex flex-1 bg-neutral-300 text-neutral-500 text-center items-center justify-center p-2 rounded-xl ${mutationDeleteAgenda.isPending ? "bg-red-500 text-white" : "hover:bg-red-500 hover:text-white active:bg-red-500 active:text-white transition-color ease-in-out duration-200"}`}
@@ -173,6 +181,22 @@ export const DetailAgenda = ({
   const setOnUpdate = useAgendas((state) => state.setOnUpadate);
   const dataUser = useUserSession((state) => state.dataUser);
 
+  const router = useRouter();
+
+  const queryClient = useQueryClient();
+
+  const mutationPublish = useMutation({
+    mutationFn: (formData: FormData) =>
+      apiFetch("/api/query/agenda/updateAgenda", {
+        method: "PUT",
+        body: formData,
+      }).then((e) => e.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["unpublish"] });
+      setOnDetail(null);
+    },
+  });
+
   return (
     <div className="w-full h-fit rounded-b-2xl flex flex-col items-center justify-start bg-primary-foreground overflow-y-auto relative">
       <div
@@ -202,18 +226,51 @@ export const DetailAgenda = ({
         <div className="w-full flex items-center justify-start gap-x-2 my-3">
           {dataUser && dataUser.role === "SUDO" && (
             <>
-              <div
+              <button
+                disabled={mutationPublish.isPending}
                 onClick={() => setOnUpdate(agenda)}
                 className="px-3 py-2 bg-green-500 text-white rounded-xl "
               >
-                Update
-              </div>
-              <div
+                {mutationPublish.isPending ? (
+                  <Loader className="size-5 animate-spin" />
+                ) : (
+                  "Update"
+                )}
+              </button>
+              <button
+                disabled={mutationPublish.isPending}
                 onClick={() => setOnDelete(agenda)}
                 className="px-3 py-2 bg-red-500 text-white rounded-xl "
               >
-                Delete
-              </div>
+                {mutationPublish.isPending ? (
+                  <Loader className="size-5 animate-spin" />
+                ) : (
+                  "Delete"
+                )}
+              </button>
+              <button
+                disabled={mutationPublish.isPending}
+                onClick={() => {
+                  const formData = new FormData();
+                  formData.append("id", agenda.id as string);
+                  formData.append("published", agenda.published ? "0" : "1");
+                  mutationPublish.mutateAsync(formData).then((e) =>
+                    toast("Pesan", {
+                      description: e.message,
+                      closeButton: true,
+                    }),
+                  );
+                }}
+                className="px-3 py-2 bg-primary text-white rounded-xl "
+              >
+                {mutationPublish.isPending ? (
+                  <Loader className="size-5 animate-spin" />
+                ) : agenda.published ? (
+                  "Jangan Publish"
+                ) : (
+                  "Publish"
+                )}
+              </button>
             </>
           )}
         </div>
@@ -221,14 +278,23 @@ export const DetailAgenda = ({
           <div className="px-3 py-1 text-sm bg-green-200 text-green-500 border-green-100 rounded-2xl">
             {agenda.biaya_name}
           </div>
-          <Share className="size-6 md:size-7 active:text-primary transition-colors ease-in-out duration-200" />
+          <Share
+            onClick={() => {
+              setOnDetail(null);
+              router.push(`/${agenda.id}`);
+            }}
+            className="size-6 md:size-7 active:text-primary transition-colors ease-in-out duration-200"
+          />
         </div>
         <div className="w-full flex-col flex flex-wrap text-wrap items-start justify-center gap-y-3 pb-5 border-b mb-10">
-          <span className="text-xl md:text-3xl font-extrabold text-wrap">
+          <span className="text-xl md:text-3xl font-extrabold text-wrap wrap-anywhere">
             {agenda.title}
           </span>
           <div className="flex flex-col items-start justify-center text-sm">
-            <span className="text-center gap-x-1 flex text-wrap items-start justify-start font-light">
+            <a
+              href={"#link"}
+              className="text-center gap-x-1 flex text-wrap items-start justify-start font-light text-blue-900 wrap-anywhere"
+            >
               <Locate className="size-4 shrink-0" />
               {agenda.on.toString() === "1" ? (
                 <span className="flex-1 text-start ">
@@ -237,7 +303,7 @@ export const DetailAgenda = ({
               ) : (
                 agenda.via_name
               )}
-            </span>
+            </a>
             <span className="text-center gap-x-1 flex items-center justify-start font-light flex-wrap text-wrap">
               <Calendar className="size-4" />{" "}
               {formatDate(new Date(agenda.date))}
@@ -246,7 +312,9 @@ export const DetailAgenda = ({
         </div>
         <div className="w-full flex items-start justify-start flex-col gap-y-2 min-h-50 pb-5">
           <span className="text-base font-bold">Deskripsi</span>
-          <p className="whitespace-pre-line text-sm">{agenda.description}</p>
+          <p className="wrap-anywhere text-sm w-full text-wrap">
+            {agenda.description}
+          </p>
         </div>
         <div className="w-full flex items-start justify-start flex-col pb-5 border-b mb-10">
           <span className="text-xs font-normal flex items-start justify-start gap-x-1">
@@ -271,12 +339,13 @@ export const DetailAgenda = ({
           <span className="text-base font-bold">Informasi Lainnya</span>
           <div className="flex items-start flex-col justify-start border p-2 rounded-xl gap-y-2.5">
             <Link
+              id="link"
               href={
                 agenda.on.toString() === "1"
                   ? agenda.location_url!
                   : agenda.via_link!
               }
-              className="font-normal text-xs flex items-center justify-start gap-x-1"
+              className="font-normal text-xs flex items-center justify-start gap-x-1 text-blue-900 wrap-anywhere"
             >
               <LinkIcon className="size-4" />
               {agenda.on.toString() === "1"
@@ -291,7 +360,7 @@ export const DetailAgenda = ({
                 <Mic className="size-4" /> Pembicara
               </span>
               <p className="whitespace-pre-line text-xs">{agenda.pembicara}</p>
-            </div>{" "}
+            </div>
             <div className="flex w-full items-start justify-start flex-col border p-2 rounded-xl gap-y-1">
               <span className="font-normal text-xs flex items-start justify-start gap-x-1">
                 <Handshake className="size-4" /> Host
@@ -363,9 +432,6 @@ export const Content = () => {
       <div className="shrink-0 flex mb-8">
         <Tab onClick={() => setFocusTab("Semua")} focusTab={focusTab}>
           Semua
-        </Tab>
-        <Tab onClick={() => setFocusTab("Untuk Kamu")} focusTab={focusTab}>
-          Untuk Kamu
         </Tab>
         <Tab onClick={() => setFocusTab("Hari Ini")} focusTab={focusTab}>
           Hari Ini

@@ -1,5 +1,6 @@
 import prisma from "@/DB/db";
 import {
+  RequestAgendaById,
   RequestAgendaCreate,
   RequestAgendaDelete,
   RequestAgendaGet,
@@ -9,6 +10,9 @@ import {
   RequestItemDelete,
   RequestItemGet,
   RequestItemUpdate,
+  RequestUserDelete,
+  RequestUserGet,
+  RequestUserUpdate,
 } from "@/dtype/request-item";
 import { getHariIni } from "./getDatetime";
 
@@ -412,6 +416,43 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
   };
 }
 
+export async function getAgendaUnpublished(optionGetAgendas: RequestAgendaGet) {
+  const batch = optionGetAgendas.batch;
+  const page = (optionGetAgendas.page - 1) * batch;
+  const hariIni = getHariIni();
+
+  const agendas = await prisma.agenda.findMany({
+    skip: page,
+    take: batch,
+    orderBy: {
+      createdAt: "desc",
+    },
+    where: {
+      date: {
+        gte: hariIni.gt,
+      },
+      published: false,
+    },
+  });
+  const total = await prisma.agenda.count({
+    skip: page,
+    take: batch,
+    orderBy: {
+      createdAt: "desc",
+    },
+    where: {
+      date: {
+        gte: hariIni.gt,
+      },
+      published: false,
+    },
+  });
+  return {
+    data: agendas,
+    total: total,
+  };
+}
+
 export async function createAgenda(
   newAgenda: Omit<RequestAgendaCreate, "image">,
 ) {
@@ -502,6 +543,18 @@ export async function updateAgenda(agenda: Omit<RequestAgendaUpdate, "image">) {
   });
 }
 
+export async function getAgendaById(body: RequestAgendaById) {
+  const agenda = await prisma.agenda.findUnique({
+    where: {
+      id: body.id,
+    },
+  });
+
+  return {
+    data: agenda,
+  };
+}
+
 export async function getAgendaHariIni(optionGetAgendas: RequestAgendaGet) {
   const batch = optionGetAgendas.batch;
   const page = (optionGetAgendas.page - 1) * batch;
@@ -574,4 +627,38 @@ export async function getAgendaMingguIni(optionGetAgendas: RequestAgendaGet) {
     data: agendaMingguIni,
     total: totalAgenda,
   };
+}
+
+export async function getAllUser(body: RequestUserGet) {
+  const batch = body.batch;
+  const page = (body.page - 1) * batch;
+  const users = await prisma.user.findMany({
+    take: batch,
+    skip: page,
+  });
+  const total = await prisma.user.count({
+    take: batch,
+    skip: page,
+  });
+  return {
+    data: users,
+    total: total,
+  };
+}
+
+export async function updateUser(body: RequestUserUpdate) {
+  return await prisma.user.update({
+    where: {
+      id: body.id,
+    },
+    data: {
+      role: body.role,
+    },
+  });
+}
+
+export async function deleteUser(body: RequestUserDelete) {
+  return await prisma.user.delete({
+    where: { id: body.id },
+  });
 }

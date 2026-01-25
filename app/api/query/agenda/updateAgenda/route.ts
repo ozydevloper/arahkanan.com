@@ -3,10 +3,16 @@ import prisma from "@/DB/db";
 import { RequestAgendaUpdate } from "@/dtype/request-item";
 import { updateAgenda } from "@/lib/api-request";
 import { DeleteImage, UploadImage } from "@/lib/imageOperation";
+import { verifySignature } from "@/lib/signature";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {
   try {
+    const nothingToSee = req.headers.get("nothing-to-see");
+
+    if (!!!nothingToSee) throw new Error();
+    if (!verifySignature(nothingToSee)) throw new Error();
+
     const formData = await req.formData();
     const session = await auth();
     if (!!!session) throw new Error();
@@ -37,7 +43,9 @@ export async function PUT(req: NextRequest) {
       topik_name: formData.get("topik_name") as string | null,
       activity_time: formData.get("activity_time") as string | null,
       biaya_name: formData.get("biaya_name") as string | null,
-      date: new Date(formData.get("date") as string),
+      date: formData.get("date")
+        ? new Date(formData.get("date") as string)
+        : null,
 
       image_public_id: image_public_id,
       image_url: image_url,
@@ -67,8 +75,7 @@ export async function PUT(req: NextRequest) {
       message: `Berhasil update agenda id: ${updatedAgenda.id}`,
       success: true,
     });
-  } catch (err) {
-    console.log(err);
+  } catch {
     return NextResponse.json({
       message: "Terjadi kesalahan di database",
       success: false,

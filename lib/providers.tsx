@@ -11,6 +11,8 @@ import { useAgendas, useUserSession } from "./zustand";
 import { UpdateAgenda } from "@/components/core-ui-new/topbar/updateAgenda";
 import { useSession } from "next-auth/react";
 import { CreateAgenda } from "@/components/core-ui-new/topbar/createAgenda";
+import { PublishingBox } from "@/components/core-ui-new/publishing-box";
+import { toast, Toaster } from "sonner";
 
 export default function Providers({
   children,
@@ -23,9 +25,12 @@ export default function Providers({
   const onDelete = useAgendas((state) => state.onDelete);
   const onCreate = useAgendas((state) => state.onCreate);
   const onUpdate = useAgendas((state) => state.onUpdate);
+  const onPublishing = useAgendas((state) => state.onPublishing);
 
   const setOnCreate = useAgendas((state) => state.setOnCreate);
   const setDataUser = useUserSession((state) => state.setDataUser);
+  const setOnPublishing = useAgendas((state) => state.setOnPublishing);
+
   const dataUser = useUserSession((state) => state.dataUser);
 
   useEffect(() => {
@@ -52,28 +57,35 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster duration={5000} position="top-center" />
       {dataUser && dataUser.id && (
         <>
           <Portal onOpen={onCreate}>
-            <CreateAgenda
-              onClick={() => setOnCreate(!onCreate)}
-              onCreate={onCreate}
-            />
+            {onCreate && (
+              <CreateAgenda
+                onClick={() => setOnCreate(!onCreate)}
+                onCreate={onCreate}
+              />
+            )}
           </Portal>
 
-          <Portal onOpen={!!onDelete}>
+          <Portal typeFor="delete" onOpen={!!onDelete}>
             {onDelete && <PopUpDeleteAgenda agenda={onDelete} />}
           </Portal>
 
-          <Portal onOpen={!!onUpdate}>
+          <Portal typeFor="formUpdate" onOpen={!!onUpdate}>
             {!!onUpdate && <UpdateAgenda agenda={onUpdate} />}
+          </Portal>
+          <Portal onOpen={onPublishing} show="top" typeFor="publish">
+            {onPublishing && (
+              <PublishingBox onClick={() => setOnPublishing(!onPublishing)} />
+            )}
           </Portal>
         </>
       )}
-      <Portal onOpen={!!onDetail}>
+      <Portal typeFor="detail" onOpen={!!onDetail}>
         {onDetail && <DetailAgenda agenda={onDetail} />}
       </Portal>
-
       {children}
     </QueryClientProvider>
   );

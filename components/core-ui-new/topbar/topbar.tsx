@@ -9,7 +9,7 @@ const TopBar = () => {
       <LogoApp className="min-w-fit" />
       <SearchBar className="flex-1 " />
       <Menu className="shrink-0" />
-      <ItemsTopBar className="shrink" />
+      <ItemsTopBar className="shrink-0" />
     </div>
   );
 };

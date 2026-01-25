@@ -167,7 +167,7 @@ export default function SearchBar({
       >
         <Search size={14} /> Cari Agenda
       </div>
-      <Portal onOpen={onSearch} show="top">
+      <Portal typeFor="search" onOpen={onSearch} show="top">
         <div className="w-full h-full px-5 bg-primary-foreground pt-2 flex flex-col items-center justify-start overflow-y-auto">
           <div className="p-1.5  rounded-xl flex items-center justify-between w-full ">
             <LogoApp />

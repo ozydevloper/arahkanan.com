@@ -28,6 +28,10 @@ export interface RequestAgendaGet {
   page: number;
 }
 
+export interface RequestAgendaById {
+  id: string;
+}
+
 export interface RequestAgendaSearch {
   title: string | null;
   date: string | null;
@@ -97,4 +101,18 @@ export interface RequestAgendaUpdate {
   kalangan_name?: string | null;
 
   published?: string | null;
+}
+
+export interface RequestUserGet {
+  page: number;
+  batch: number;
+}
+
+export interface RequestUserUpdate {
+  id: string;
+  role: string;
+}
+
+export interface RequestUserDelete {
+  id: string;
 }

@@ -3,10 +3,16 @@ import prisma from "@/DB/db";
 import { RequestAgendaCreate } from "@/dtype/request-item";
 import { createAgenda } from "@/lib/api-request";
 import { UploadImage } from "@/lib/imageOperation";
+import { verifySignature } from "@/lib/signature";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
+    const nothingToSee = req.headers.get("nothing-to-see");
+
+    if (!!!nothingToSee) throw new Error();
+    if (!verifySignature(nothingToSee)) throw new Error();
+
     const formData = await req.formData();
     const session = await auth();
     if (!!!session) throw new Error();

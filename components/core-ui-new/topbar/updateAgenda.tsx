@@ -1,3 +1,4 @@
+"use client";
 import { Prisma } from "@/app/generated/prisma/client";
 import { ApiResponse } from "@/dtype/api_response";
 import { RequestAgendaUpdate } from "@/dtype/request-item";
@@ -8,6 +9,7 @@ import { Loader, RefreshCcw, X } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAgendas } from "@/lib/zustand";
 import { ItemErorr, ItemLoading } from "./createAgenda";
+import { toast } from "sonner";
 
 const RefetchItem = ({
   onClickRefetch,
@@ -92,7 +94,7 @@ export const UpdateAgenda = ({
     mutationAgenda.mutateAsync(formData).then((e) => {
       setOnUpdate(null);
       setOnDetail(null);
-      alert(JSON.stringify(e));
+      toast("Pesan", { description: e.message, closeButton: true });
     });
   };
 

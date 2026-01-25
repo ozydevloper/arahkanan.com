@@ -1,5 +1,5 @@
-import { RequestAgendaGet } from "@/dtype/request-item";
-import { getAgendaMingguIni } from "@/lib/api-request";
+import { RequestAgendaById } from "@/dtype/request-item";
+import { getAgendaById } from "@/lib/api-request";
 import { verifySignature } from "@/lib/signature";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,18 +9,18 @@ export async function POST(req: NextRequest) {
 
     if (!!!nothingToSee) throw new Error();
     if (!verifySignature(nothingToSee)) throw new Error();
-    const body = (await req.json()) as RequestAgendaGet;
-    const agendas = await getAgendaMingguIni(body);
+
+    const body = (await req.json()) as RequestAgendaById;
+    const agendas = await getAgendaById(body);
     return NextResponse.json({
       message: "Berhasil mendapatkan",
-      data: agendas,
       success: true,
+      data: agendas,
     });
   } catch {
     return NextResponse.json({
-      message: "Terjadi kesalahan di database!",
+      message: "Terjadi kesalahan di database",
       success: false,
-      data: [],
     });
   }
 }

@@ -1,12 +1,12 @@
 import { auth } from "@/auth";
 import prisma from "@/DB/db";
-import { RequestAgendaDelete } from "@/dtype/request-item";
-import { deletedAgendaById } from "@/lib/api-request";
+import { RequestAgendaDelete, RequestAgendaGet } from "@/dtype/request-item";
+import { deletedAgendaById, getAgendaUnpublished } from "@/lib/api-request";
 import { DeleteImage } from "@/lib/imageOperation";
 import { verifySignature } from "@/lib/signature";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
     const nothingToSee = req.headers.get("nothing-to-see");
 
@@ -25,13 +25,13 @@ export async function DELETE(req: NextRequest) {
     if (!!!cekSudo) throw new Error();
     if (cekSudo.role !== "SUDO") throw new Error();
 
-    const body = (await req.json()) as RequestAgendaDelete;
-    const deletedAgenda = await deletedAgendaById(body);
-    const deletedImage = await DeleteImage(deletedAgenda.image_public_id);
+    const body = (await req.json()) as RequestAgendaGet;
+    const agendas = await getAgendaUnpublished(body);
 
     return NextResponse.json({
-      message: `Berhasil menghapus agenda, dengan id:${deletedAgenda.id}, mengahpus image: ${deletedImage.success}`,
+      message: "Berhasil mendapatkan",
       success: true,
+      data: agendas,
     });
   } catch {
     return NextResponse.json({

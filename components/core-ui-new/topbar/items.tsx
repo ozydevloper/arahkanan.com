@@ -45,6 +45,10 @@ const ItemMenu = ({
 export const ItemsTopBar = ({ className }: { className: ClassNameValue }) => {
   const onCreate = useAgendas((state) => state.onCreate);
   const setOnCreate = useAgendas((state) => state.setOnCreate);
+
+  const onPublishing = useAgendas((state) => state.onPublishing);
+  const setOnPublishing = useAgendas((state) => state.setOnPublishing);
+
   const session = useUserSession((state) => state.dataUser);
 
   const route = useRouter();
@@ -54,13 +58,17 @@ export const ItemsTopBar = ({ className }: { className: ClassNameValue }) => {
       className={`hidden md:flex ${className} md:gap-x-1 items-center justify-center`}
     >
       {session && session.role === "SUDO" && (
-        <ItemTopbar onClick={() => route.push("/kelola")}>
-          Kelola Agenda
-        </ItemTopbar>
+        <>
+          <ItemTopbar onClick={() => route.push("/kelola")}>
+            Kelola Agenda
+          </ItemTopbar>
+          <ItemTopbar onClick={() => setOnPublishing(!onPublishing)}>
+            Publishing
+          </ItemTopbar>
+        </>
       )}
       {session && (session.role === "SUPERUSER" || session.role === "SUDO") && (
         <>
-          <ItemTopbar>Approval Box</ItemTopbar>
           <ItemTopbar
             onClick={() => {
               if (!!!session) {
@@ -76,9 +84,6 @@ export const ItemsTopBar = ({ className }: { className: ClassNameValue }) => {
 
       {session && (
         <>
-          <ItemTopbar onClick={() => route.push("/profile")}>
-            Profile
-          </ItemTopbar>
           <ItemTopbar onClick={() => signOut()}>Logout</ItemTopbar>
         </>
       )}
@@ -93,15 +98,24 @@ export const ItemsTopBar = ({ className }: { className: ClassNameValue }) => {
 export const ItemsMenu = () => {
   const onCreate = useAgendas((state) => state.onCreate);
   const setOnCreate = useAgendas((state) => state.setOnCreate);
+  const onPublishing = useAgendas((state) => state.onPublishing);
+  const setOnPublishing = useAgendas((state) => state.setOnPublishing);
+
   const session = useUserSession((state) => state.dataUser);
 
   const route = useRouter();
 
   return (
     <div className="w-full flex items-start justify-center flex-col">
-      <ItemMenu onClick={() => route.push("/profil")}>Profile</ItemMenu>
       {session && session.role === "SUDO" && (
-        <ItemMenu onClick={() => route.push("/kelola")}>Kelola Agenda</ItemMenu>
+        <>
+          <ItemMenu onClick={() => route.push("/kelola")}>
+            Kelola Agenda
+          </ItemMenu>
+          <ItemMenu onClick={() => setOnPublishing(!onPublishing)}>
+            Approval Box
+          </ItemMenu>
+        </>
       )}
       {session && (session.role === "SUDO" || session.role === "SUPERUSER") && (
         <>
@@ -115,11 +129,10 @@ export const ItemsMenu = () => {
           >
             Bikin Acara
           </ItemMenu>
-          <ItemMenu>Approval Box</ItemMenu>
         </>
       )}
-      <ItemMenu onClick={() => signIn("google")}>Login</ItemMenu>
-      <ItemMenu onClick={() => signOut()}>Logout</ItemMenu>
+      {!session && <ItemMenu onClick={() => signIn("google")}>Login</ItemMenu>}
+      {session && <ItemMenu onClick={() => signOut()}>Logout</ItemMenu>}
     </div>
   );
 };
