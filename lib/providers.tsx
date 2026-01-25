@@ -60,7 +60,7 @@ export default function Providers({
       <Toaster duration={5000} position="top-center" />
       {dataUser && dataUser.id && (
         <>
-          <Portal onOpen={onCreate}>
+          <Portal onOpen={onCreate} typeFor="create">
             {onCreate && (
               <CreateAgenda
                 onClick={() => setOnCreate(!onCreate)}

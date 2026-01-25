@@ -11,7 +11,14 @@ export const Portal = ({
   children: React.ReactNode;
   onOpen: boolean;
   show?: "right" | "top";
-  typeFor?: "detail" | "formUpdate" | "delete" | "search" | "publish";
+  typeFor?:
+    | "detail"
+    | "formUpdate"
+    | "delete"
+    | "search"
+    | "publish"
+    | "create"
+    | "menuSide";
 }) => {
   const [mounted, setMounted] = useState<boolean>(false);
   const [portalRoot, setPortalRoot] = useState<null | HTMLElement>(null);
@@ -47,7 +54,7 @@ export const Portal = ({
 
   return createPortal(
     <div
-      className={`w-full h-dvh fixed inset-0 bg-black/50 z-10 flex justify-center transition-all ease-in-out duration-200 overflow-y-auto  ${show === "right" ? (onOpen ? "translate-x-0" : "translate-x-full") : show === "top" ? (onOpen ? "translate-y-0" : "-translate-y-full") : onOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"} ${typeFor === "detail" ? "z-50" : typeFor === "formUpdate" ? "z-51" : typeFor === "delete" ? "z-52" : typeFor === "search" ? "z-7" : typeFor === "publish" ? "z-9" : "z-1"}`}
+      className={`w-full h-dvh fixed inset-0 bg-black/50 z-10 flex justify-center transition-all ease-in-out duration-200 overflow-y-auto  ${show === "right" ? (onOpen ? "translate-x-0" : "translate-x-full") : show === "top" ? (onOpen ? "translate-y-0" : "-translate-y-full") : onOpen ? "scale-100 opacity-100" : "scale-0 opacity-0"} ${typeFor === "detail" ? "z-50" : typeFor === "formUpdate" ? "z-51" : typeFor === "delete" ? "z-52" : typeFor === "search" ? "z-7" : typeFor === "publish" ? "z-20" : typeFor === "menuSide" ? "z-2" : typeFor === "create" ? "z-20" : "z-1"}`}
     >
       {children}
     </div>,
