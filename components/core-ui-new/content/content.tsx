@@ -383,7 +383,7 @@ export const Content = () => {
   const [pageSemuaAgenda, setPageSemuaAgenda] = useState<number>(1);
   const [pageHariIni, setPageHariIni] = useState<number>(1);
   const [pageMingguIni, setPageMingguIni] = useState<number>(1);
-  const batchContent = 10;
+  const batchContent = 12;
 
   const focusTab = useAgendas((state) => state.focusTab);
   const setFocusTab = useAgendas((state) => state.setFocusTab);

@@ -10,7 +10,7 @@ import { X } from "lucide-react";
 export const PublishingBox = ({ onClick }: { onClick: () => void }) => {
   const onPublishing = useAgendas((state) => state.onPublishing);
   const [page, setPage] = useState<number>(1);
-  const batch = 10;
+  const batch = 12;
   const queryAgendaUnpublish = useQuery({
     queryKey: ["unpublish", { page: page, batch: batch }],
     queryFn: () =>

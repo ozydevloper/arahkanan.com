@@ -343,7 +343,7 @@ export default function Page() {
   const setUpdateUser = useUserSession((state) => state.setUpdateUser);
   const refUserUpdate = useRef<HTMLSelectElement>(null);
 
-  const batchContent = 10;
+  const batchContent = 12;
   const [pageContent, setPageContent] = useState<number>(1);
   const [pageUser, setPageUser] = useState<number>(1);
 

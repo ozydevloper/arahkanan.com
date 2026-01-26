@@ -33,7 +33,7 @@ export default function SearchBar({
     title: null,
     topik_name: null,
   });
-  const batchContent = 10;
+  const batchContent = 12;
 
   const {
     register,
