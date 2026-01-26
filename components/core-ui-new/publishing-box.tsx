@@ -24,19 +24,20 @@ export const PublishingBox = ({ onClick }: { onClick: () => void }) => {
     enabled: onPublishing,
   });
   return (
-    <div className="w-full h-dvh bg-white flex flex-col -z-10">
-      <div className="shink-0 flex items-center justify-center px-5 pt-5">
-        <span className="flex-1 text-sm font-bold">Acara UnPublished</span>
+    <div className="w-full h-dvh bg-white flex flex-col items-center">
+      <div className="w-full flex items-center justify-end p-5 ">
         <X className="shrink-0" onClick={onClick} />
       </div>
-      <ContentAgenda
-        batch={batch}
-        contentAgenda={queryAgendaUnpublish}
-        page={page}
-        setPage={setPage}
-      >
-        Menunggu di publish
-      </ContentAgenda>
+      <div className="max-w-[1080px] w-full ">
+        <ContentAgenda
+          batch={batch}
+          contentAgenda={queryAgendaUnpublish}
+          page={page}
+          setPage={setPage}
+        >
+          Menunggu di publish
+        </ContentAgenda>
+      </div>
     </div>
   );
 };

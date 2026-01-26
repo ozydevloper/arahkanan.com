@@ -11,7 +11,7 @@ export const BigPanel = ({
 }) => {
   return (
     <div className="items-center justify-center flex">
-      <div className="w-full md:w-[1200px] h-[130px] md:h-[400px] relative md:rounded-2xl  overflow-hidden">
+      <div className="w-full h-[125px] md:w-[1080px] md:h-[250px] max-w-[1080px] max-h-[250px] relative md:rounded-2xl rounded-xl  overflow-hidden">
         {banner.isLoading || banner.isRefetching ? (
           <div className="w-full h-full bg-primary/25 animate-pulse flex items-center justify-center">
             <RefreshCcw className="size-5 animate-spin" />

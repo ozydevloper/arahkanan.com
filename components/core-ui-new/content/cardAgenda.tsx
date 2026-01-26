@@ -28,7 +28,7 @@ export const CardAgenda = ({
   return (
     <div
       onClick={() => setOnDetail(agenda)}
-      className=" w-full md:w-55 md:max-w-55 min-h-60 rounded-2xl overflow-hidden flex flex-col  hover:shadow-xl transition-all ease-in-out duration-200  relative active:shadow-xl active:scale-102 hover:scale-102"
+      className=" w-full max-h-fit rounded-2xl overflow-hidden flex flex-col  hover:shadow-xl transition-all ease-in-out duration-200  relative active:shadow-xl active:scale-102 hover:scale-102"
     >
       <div className="w-full h-35 relative overflow-hidden">
         <div className="w-full absolute bottom-1 right-1 z-1 flex items-center justify-end gap-x-0.5 ">

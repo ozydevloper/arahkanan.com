@@ -5,10 +5,11 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { Prisma } from "@/app/generated/prisma/client";
 import { ApiResponse } from "@/dtype/api_response";
 import { CardAgenda } from "./cardAgenda";
+import { ClassNameValue } from "tailwind-merge";
 
 const CardLoading = () => {
   return (
-    <div className=" w-full md:w-50 md:max-w-50 min-h-60  flex flex-col gap-y-2">
+    <div className=" w-full min-h-60  flex flex-col gap-y-2">
       <div className="w-full h-35 bg-primary/50 animate-pulse rounded-2xl"></div>
       <div className="w-1/2 h-5 bg-primary/50 animate-pulse rounded-2xl"></div>
       <div className="w-1/3 h-5 bg-primary/50 animate-pulse rounded-2xl"></div>
@@ -34,7 +35,7 @@ export const LoadingContentIcon = ({
 
 export const LoadingContent = () => {
   return (
-    <div className="w-full flex flex-wrap items-center gap-x-10 justify-center">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 relative gap-x-3 gap-y-10 w-full">
       <CardLoading />
       <CardLoading />
       <CardLoading />
@@ -47,12 +48,16 @@ export const LoadingContent = () => {
 export const ErrorContent = ({
   contentQuery,
   children,
+  className,
 }: {
   contentQuery: UseQueryResult;
   children: React.ReactNode;
+  className?: ClassNameValue;
 }) => {
   return (
-    <div className="w-full h-100  rounded-2xl items-center justify-center flex flex-col gap-y-0.5">
+    <div
+      className={`w-full h-50  rounded-2xl items-center justify-center flex flex-col gap-y-0.5 ${className}`}
+    >
       <LogoApp />
       <div className="text-sm font-light text-center">{children}</div>
       <div
@@ -75,23 +80,23 @@ export const StateContent = ({
   contentQuery: UseQueryResult<ApiResponse<Prisma.AgendaGetPayload<object>[]>>;
 }) => {
   return (
-    <div className="flex flex-wrap gap-x-5 items-center gap-y-10 justify-center ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 relative gap-x-3 gap-y-10">
       {contentQuery.isLoading || contentQuery.isRefetching ? (
-        <LoadingContent />
+        Array.from({ length: 8 }).map((_, i) => <CardLoading key={i} />)
       ) : contentQuery.isError ? (
-        <ErrorContent contentQuery={contentQuery}>
+        <ErrorContent className="col-span-4" contentQuery={contentQuery}>
           Terjadi kesalahan tak terduga di server!
         </ErrorContent>
       ) : !contentQuery.isSuccess ? (
-        <ErrorContent contentQuery={contentQuery}>
+        <ErrorContent className="col-span-4" contentQuery={contentQuery}>
           Mendapatkan event berhasil, tapi ada kesalahan!
         </ErrorContent>
       ) : !contentQuery.data.success ? (
-        <ErrorContent contentQuery={contentQuery}>
+        <ErrorContent className="col-span-4" contentQuery={contentQuery}>
           {contentQuery.data.message}
         </ErrorContent>
       ) : contentQuery.data.data.total === 0 ? (
-        <ErrorContent contentQuery={contentQuery}>
+        <ErrorContent className="col-span-4" contentQuery={contentQuery}>
           Sepertinya tidak ada event, coba untuk lihat-lihat yang lain
         </ErrorContent>
       ) : (

@@ -33,7 +33,7 @@ export const Landing = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["banner"] }),
   });
   return (
-    <div className="flex flex-col md:px-5 md:py-2 gap-y-2 mb-5 mt-17">
+    <div className="flex flex-col md:py-2 gap-y-2 mb-5 mt-15 w-full md:w-[1080px] max-w-[1080px]">
       <BigPanel banner={queryBanner} />
       {session && session.role && session.role === "SUDO" && (
         <div className="flex items-center justify-start gap-x-1">

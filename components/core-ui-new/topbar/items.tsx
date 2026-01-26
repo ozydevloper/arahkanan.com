@@ -1,7 +1,5 @@
 "use client";
 import { ClassNameValue } from "tailwind-merge";
-import { Portal } from "../portal";
-import { CreateAgenda } from "./createAgenda";
 import { useAgendas, useUserSession } from "@/lib/zustand";
 import { useRouter } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
@@ -113,7 +111,7 @@ export const ItemsMenu = () => {
             Kelola Agenda
           </ItemMenu>
           <ItemMenu onClick={() => setOnPublishing(!onPublishing)}>
-            Approval Box
+            Publishing
           </ItemMenu>
         </>
       )}

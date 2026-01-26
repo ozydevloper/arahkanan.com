@@ -23,7 +23,10 @@ export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
         <Loading />
       ) : (
         queryAgenda.isSuccess && (
-          <DetailAgenda agenda={queryAgenda.data.data.data} />
+          <DetailAgenda
+            closeButton={false}
+            agenda={queryAgenda.data.data.data}
+          />
         )
       )}
     </div>

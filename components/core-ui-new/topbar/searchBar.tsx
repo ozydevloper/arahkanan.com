@@ -335,7 +335,7 @@ export default function SearchBar({
             </div>
           </form>
 
-          <div className=" w-full mt-10">
+          <div className=" w-full mt-10 md:w-[1080px] max-w-[1080px]">
             <ContentAgenda
               batch={batchContent}
               page={pageSearch}

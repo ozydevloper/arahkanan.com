@@ -172,8 +172,10 @@ export const ContentAgenda = ({
 
 export const DetailAgenda = ({
   agenda,
+  closeButton = true,
 }: {
   agenda: Prisma.AgendaGetPayload<object>;
+  closeButton?: boolean;
 }) => {
   const setOnDetail = useAgendas((state) => state.setOnDetail);
   const setOnDelete = useAgendas((state) => state.setOnDelete);
@@ -198,12 +200,14 @@ export const DetailAgenda = ({
 
   return (
     <div className="w-full h-fit rounded-b-2xl flex flex-col items-center justify-start bg-primary-foreground overflow-y-auto relative">
-      <div
-        onClick={() => setOnDetail(null)}
-        className="p-1 fixed right-5 z-1 top-5 rounded-xl hover:bg-red-500 hover:text-red-50 active:bg-red-700 active:text-red-200 transition-all ease-in-out duration-200"
-      >
-        <X size={25} />
-      </div>
+      {closeButton && (
+        <div
+          onClick={() => setOnDetail(null)}
+          className="p-1 fixed right-5 z-1 top-5 rounded-xl hover:bg-red-500 hover:text-red-50 active:bg-red-700 active:text-red-200 transition-all ease-in-out duration-200"
+        >
+          <X size={25} />
+        </div>
+      )}
       <div className="w-full md:w-[1150px] h-[200px] md:h-[400px] relative overflow-hidden">
         <Image
           fill
@@ -427,7 +431,7 @@ export const Content = () => {
   });
 
   return (
-    <div className="w-full flex flex-col px-4 md:px-10 border-t ">
+    <div className="w-full flex flex-col border-t md:w-[1080px] max-w-[1080px]">
       <div className="shrink-0 flex mb-8">
         <Tab onClick={() => setFocusTab("Semua")} focusTab={focusTab}>
           Semua
@@ -457,17 +461,17 @@ export const Content = () => {
         >
           Hari Ini
         </ContentAgenda>
-      ) : focusTab === "Minggu Ini" ? (
-        <ContentAgenda
-          setPage={setPageMingguIni}
-          page={pageMingguIni}
-          batch={batchContent}
-          contentAgenda={mingguIni}
-        >
-          Minggu Ini
-        </ContentAgenda>
       ) : (
-        <div></div>
+        focusTab === "Minggu Ini" && (
+          <ContentAgenda
+            setPage={setPageMingguIni}
+            page={pageMingguIni}
+            batch={batchContent}
+            contentAgenda={mingguIni}
+          >
+            Minggu Ini
+          </ContentAgenda>
+        )
       )}
     </div>
   );
