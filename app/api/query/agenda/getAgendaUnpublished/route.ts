@@ -22,7 +22,6 @@ export async function POST(req: NextRequest) {
       },
     });
     if (!!!cekSudo) throw new Error();
-    if (cekSudo.role !== "SUDO") throw new Error();
 
     const body = (await req.json()) as RequestAgendaGet;
     const agendas = await getAgendaUnpublished(body);
