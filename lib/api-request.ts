@@ -15,6 +15,7 @@ import {
   RequestUserUpdate,
 } from "@/dtype/request-item";
 import { getHariIni } from "./getDatetime";
+import { addDays, endOfDay, startOfDay } from "date-fns";
 
 //API AGENDA ITEM
 
@@ -309,13 +310,14 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
   const page = (optionGetAgendas.page - 1) * batch;
   const hariIni = getHariIni();
 
-  let tanggalTargetLt = null;
+  let start = null;
+  let end = null;
 
   if (optionGetAgendas.date) {
-    const target = new Date(optionGetAgendas.date);
-    tanggalTargetLt = new Date(
-      `${String(target.getFullYear())}-${String(target.getMonth() + 1).padStart(2, "0")}-${String(target.getDate() + 1).padStart(2, "0")}T00:00:00.000Z`,
-    );
+    const [ty, tm, td] = optionGetAgendas.date?.split("-").map(Number);
+    const date = new Date(ty, tm - 1, td);
+    start = startOfDay(date);
+    end = addDays(start, 1);
   }
 
   const agendas = await prisma.agenda.findMany({
@@ -355,10 +357,11 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
           on: String(optionGetAgendas.on),
         }),
         ...(optionGetAgendas.date &&
-          tanggalTargetLt && {
+          start &&
+          end && {
             date: {
-              gte: new Date(optionGetAgendas.date),
-              lt: tanggalTargetLt,
+              gte: start,
+              lt: end,
             },
           }),
       },
@@ -401,10 +404,11 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
           on: String(optionGetAgendas.on),
         }),
         ...(optionGetAgendas.date &&
-          tanggalTargetLt && {
+          start &&
+          end && {
             date: {
-              gte: new Date(optionGetAgendas.date),
-              lt: tanggalTargetLt,
+              gte: start,
+              lt: end,
             },
           }),
       },
