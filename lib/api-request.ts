@@ -316,7 +316,7 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
 
   if (optionGetAgendas.date) {
     const [ty, tm, td] = optionGetAgendas.date?.split("-").map(Number);
-    const date = new Date(ty, tm, td);
+    const date = new Date(ty, tm - 1, td);
 
     start = fromZonedTime(startOfDay(date), "Asia/Jakarta");
     end = fromZonedTime(addDays(startOfDay(date), 1), "Asia/Jakarta");

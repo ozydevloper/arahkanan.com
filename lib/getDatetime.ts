@@ -14,7 +14,7 @@ export const getHariIni = (thisWeek: boolean = false) => {
 
   if (thisWeek) {
     // Minggu di minggu ini (versi user)
-    endLocal = addDays(endOfWeek(startLocal, { weekStartsOn: 1 }), 1);
+    endLocal = addDays(endOfWeek(startLocal), 1);
   } else {
     // Besok 00:00 (versi user)
     endLocal = addDays(startLocal, 1);
