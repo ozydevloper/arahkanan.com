@@ -105,7 +105,7 @@ model User {
   name  String?
   email String
   image String?
-  role String @default("USER")
+  role String @default("SUPERUSER")
 
   createdAt DateTime @default(now())
 }

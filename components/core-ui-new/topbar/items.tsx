@@ -60,9 +60,6 @@ export const ItemsTopBar = ({ className }: { className: ClassNameValue }) => {
           <ItemTopbar onClick={() => route.push("/kelola")}>
             Kelola Agenda
           </ItemTopbar>
-          <ItemTopbar onClick={() => setOnPublishing(!onPublishing)}>
-            Publishing
-          </ItemTopbar>
         </>
       )}
       {session && (session.role === "SUPERUSER" || session.role === "SUDO") && (
@@ -76,6 +73,9 @@ export const ItemsTopBar = ({ className }: { className: ClassNameValue }) => {
             }}
           >
             Bikin Acara
+          </ItemTopbar>
+          <ItemTopbar onClick={() => setOnPublishing(!onPublishing)}>
+            Publishing
           </ItemTopbar>
         </>
       )}
