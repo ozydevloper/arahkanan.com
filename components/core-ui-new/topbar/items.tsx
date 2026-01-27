@@ -110,9 +110,6 @@ export const ItemsMenu = () => {
           <ItemMenu onClick={() => route.push("/kelola")}>
             Kelola Agenda
           </ItemMenu>
-          <ItemMenu onClick={() => setOnPublishing(!onPublishing)}>
-            Publishing
-          </ItemMenu>
         </>
       )}
       {session && (session.role === "SUDO" || session.role === "SUPERUSER") && (
@@ -126,6 +123,9 @@ export const ItemsMenu = () => {
             }}
           >
             Bikin Acara
+          </ItemMenu>
+          <ItemMenu onClick={() => setOnPublishing(!onPublishing)}>
+            Publishing
           </ItemMenu>
         </>
       )}
