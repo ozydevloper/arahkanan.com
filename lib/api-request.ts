@@ -15,7 +15,8 @@ import {
   RequestUserUpdate,
 } from "@/dtype/request-item";
 import { getHariIni } from "./getDatetime";
-import { addDays, endOfDay, startOfDay } from "date-fns";
+import { addDays, startOfDay } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 
 //API AGENDA ITEM
 
@@ -316,8 +317,9 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
   if (optionGetAgendas.date) {
     const [ty, tm, td] = optionGetAgendas.date?.split("-").map(Number);
     const date = new Date(ty, tm - 1, td);
-    start = startOfDay(date);
-    end = addDays(start, 1);
+
+    start = fromZonedTime(startOfDay(date), "Asia/Jakarta");
+    end = fromZonedTime(addDays(startOfDay(date), 1), "Asia/Jakarta");
   }
 
   const agendas = await prisma.agenda.findMany({
