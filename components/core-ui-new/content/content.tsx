@@ -227,7 +227,8 @@ export const DetailAgenda = ({
 
       <div className="w-full items-center px-3 md:px-25">
         <div className="w-full flex items-center justify-start gap-x-2 my-3">
-          {dataUser && dataUser.role === "SUDO" && (
+          {((dataUser && dataUser.role === "SUDO") ||
+            (dataUser && dataUser.role === "SUPERUSER")) && (
             <>
               <button
                 disabled={mutationPublish.isPending}
@@ -251,6 +252,10 @@ export const DetailAgenda = ({
                   "Delete"
                 )}
               </button>
+            </>
+          )}
+          {dataUser && dataUser.role === "SUDO" && (
+            <>
               <button
                 disabled={mutationPublish.isPending}
                 onClick={() => {
