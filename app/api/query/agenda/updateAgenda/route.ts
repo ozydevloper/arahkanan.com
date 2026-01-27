@@ -24,7 +24,6 @@ export async function PUT(req: NextRequest) {
       },
     });
     if (!!!cekSudo) throw new Error();
-    if (cekSudo.role !== "SUDO") throw new Error();
 
     let image_public_id = null;
     let image_url = null;

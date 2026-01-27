@@ -23,7 +23,6 @@ export async function DELETE(req: NextRequest) {
       },
     });
     if (!!!cekSudo) throw new Error();
-    if (cekSudo.role !== "SUDO") throw new Error();
 
     const body = (await req.json()) as RequestAgendaDelete;
     const deletedAgenda = await deletedAgendaById(body);
