@@ -20,10 +20,18 @@ export interface RequestItemGet {
 
 export interface RequestAgendaDelete {
   id: string;
+  user_id: string;
 }
 
 export interface RequestAgendaGet {
   all?: boolean;
+  batch: number;
+  page: number;
+}
+
+export interface RequestAgendaUnPublished {
+  id: string;
+  role: string;
   batch: number;
   page: number;
 }
@@ -67,6 +75,7 @@ export interface RequestAgendaCreate {
   biaya_name: string;
   kalangan_name: string;
   published: boolean;
+  user_id: string;
 }
 
 export interface RequestAgendaUpdate {
@@ -101,6 +110,7 @@ export interface RequestAgendaUpdate {
   kalangan_name?: string | null;
 
   published?: string | null;
+  user_id: string;
 }
 
 export interface RequestUserGet {

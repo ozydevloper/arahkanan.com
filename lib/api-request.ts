@@ -5,6 +5,7 @@ import {
   RequestAgendaDelete,
   RequestAgendaGet,
   RequestAgendaSearch,
+  RequestAgendaUnPublished,
   RequestAgendaUpdate,
   RequestItemCreate,
   RequestItemDelete,
@@ -286,6 +287,9 @@ export async function getSomeAgendas(optionGetAgendas: RequestAgendaGet) {
         published: true,
       },
     }),
+    include: {
+      user_relation: true,
+    },
   });
   const totalAgendas = await prisma.agenda.count({
     orderBy: {
@@ -368,6 +372,9 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
           }),
       },
     },
+    include: {
+      user_relation: true,
+    },
   });
   const totalAgendas = await prisma.agenda.count({
     skip: page,
@@ -422,7 +429,9 @@ export async function getAgendaSearch(optionGetAgendas: RequestAgendaSearch) {
   };
 }
 
-export async function getAgendaUnpublished(optionGetAgendas: RequestAgendaGet) {
+export async function getAgendaUnpublished(
+  optionGetAgendas: RequestAgendaUnPublished,
+) {
   const batch = optionGetAgendas.batch;
   const page = (optionGetAgendas.page - 1) * batch;
   const hariIni = getHariIni();
@@ -438,6 +447,13 @@ export async function getAgendaUnpublished(optionGetAgendas: RequestAgendaGet) {
         gte: hariIni.gt,
       },
       published: false,
+      ...(optionGetAgendas.role !== "SUDO" && {
+        user_id: optionGetAgendas.id,
+      }),
+    },
+
+    include: {
+      user_relation: true,
     },
   });
   const total = await prisma.agenda.count({
@@ -451,6 +467,9 @@ export async function getAgendaUnpublished(optionGetAgendas: RequestAgendaGet) {
         gte: hariIni.gt,
       },
       published: false,
+      ...(optionGetAgendas.role !== "SUDO" && {
+        user_id: optionGetAgendas.id,
+      }),
     },
   });
   return {
@@ -484,11 +503,14 @@ export async function createAgenda(
       via_link: newAgenda.via_link,
       via_name: newAgenda.via_name,
       published: newAgenda.published,
+      user_id: newAgenda.user_id,
     },
   });
 }
 
-export async function updateAgenda(agenda: Omit<RequestAgendaUpdate, "image">) {
+export async function updateAgenda(
+  agenda: Omit<RequestAgendaUpdate, "image" | "user_id">,
+) {
   return await prisma.agenda.update({
     where: {
       id: agenda.id,
@@ -554,6 +576,9 @@ export async function getAgendaById(body: RequestAgendaById) {
     where: {
       id: body.id,
     },
+    include: {
+      user_relation: true,
+    },
   });
 
   return {
@@ -578,6 +603,9 @@ export async function getAgendaHariIni(optionGetAgendas: RequestAgendaGet) {
         lt: hariIni.lt,
       },
       published: true,
+    },
+    include: {
+      user_relation: true,
     },
   });
   const totalAgenda = await prisma.agenda.count({
@@ -615,6 +643,9 @@ export async function getAgendaMingguIni(optionGetAgendas: RequestAgendaGet) {
         lt: hariIni.lt,
       },
       published: true,
+    },
+    include: {
+      user_relation: true,
     },
   });
   const totalAgenda = await prisma.agenda.count({

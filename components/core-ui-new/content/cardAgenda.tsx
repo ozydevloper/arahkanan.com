@@ -22,7 +22,11 @@ export const TagItem = ({
 export const CardAgenda = ({
   agenda,
 }: {
-  agenda: Prisma.AgendaGetPayload<object>;
+  agenda: Prisma.AgendaGetPayload<{
+    include: {
+      user_relation: true;
+    };
+  }>;
 }) => {
   const setOnDetail = useAgendas((state) => state.setOnDetail);
   return (
@@ -58,7 +62,7 @@ export const CardAgenda = ({
         {agenda.on.toString() === "1" && (
           <span className="font-light text-xs">{agenda.location_detail}</span>
         )}
-        <div className="w-full flex gap-x-1 flex-wrap gap-y-1">
+        <div className="w-full flex gap-x-1 flex-wrap gap-y-1 py-1">
           <TagItem color="green">{agenda.biaya_name}</TagItem>
           <TagItem>{agenda.kalangan_name}</TagItem>
           <TagItem color="orange">
@@ -66,6 +70,23 @@ export const CardAgenda = ({
               ? agenda.kota_name
               : `Online - ${agenda.via_name}`}
           </TagItem>
+        </div>
+        <div className="w-full py-2 border-t flex items-center justify-start text-center gap-x-2">
+          <div className="w-6 h-6 bg-primary/25 rounded-full  relative overflow-hidden">
+            <Image
+              fill
+              src={
+                agenda.user_relation.image
+                  ? (agenda.user_relation.image as string)
+                  : "/lan.webp"
+              }
+              alt={agenda.user_relation.name as string}
+              className="object-cover"
+            />
+          </div>
+          <span className="max-w-[75%] truncate text-[0.600rem]">
+            {agenda.user_relation.name}
+          </span>
         </div>
       </div>
     </div>

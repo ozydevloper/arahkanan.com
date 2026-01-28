@@ -55,6 +55,9 @@ model Agenda {
   kalangan_relation Kalangan @relation(fields: [kalangan_name], references: [name])
   kalangan_name     String
 
+  user_relation User @relation(fields: [user_id], references: [id])
+  user_id String
+
   published Boolean @default(false)
 
   createdAt DateTime @default(now())
@@ -106,6 +109,8 @@ model User {
   email String
   image String?
   role String @default("SUPERUSER")
+
+  agenda Agenda[]
 
   createdAt DateTime @default(now())
 }

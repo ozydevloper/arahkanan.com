@@ -55,6 +55,7 @@ export async function POST(req: NextRequest) {
       via_link: formData.get("via_link") as string | null,
       via_name: formData.get("via_name") as string | null,
       published: published,
+      user_id: pembuat.id as string,
     };
 
     const newAgenda = await createAgenda(

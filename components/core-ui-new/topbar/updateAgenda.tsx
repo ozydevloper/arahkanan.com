@@ -32,7 +32,11 @@ const RefetchItem = ({
 export const UpdateAgenda = ({
   agenda,
 }: {
-  agenda: Prisma.AgendaGetPayload<object>;
+  agenda: Prisma.AgendaGetPayload<{
+    include: {
+      user_relation: true;
+    };
+  }>;
 }) => {
   const setOnUpdate = useAgendas((state) => state.setOnUpadate);
   const setOnDetail = useAgendas((state) => state.setOnDetail);
@@ -81,6 +85,7 @@ export const UpdateAgenda = ({
 
   const onSubmit: SubmitHandler<RequestAgendaUpdate> = (data) => {
     const formData = new FormData();
+    formData.append("user_id", agenda.user_relation.id);
     Object.entries(data).forEach(([key, value]) => {
       if (value instanceof FileList) {
         if (!!value[0]) {

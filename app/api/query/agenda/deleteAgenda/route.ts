@@ -25,6 +25,10 @@ export async function DELETE(req: NextRequest) {
     if (!!!cekSudo) throw new Error();
 
     const body = (await req.json()) as RequestAgendaDelete;
+
+    if (cekSudo.role !== "SUDO" && cekSudo.id !== body.user_id)
+      throw new Error();
+
     const deletedAgenda = await deletedAgendaById(body);
     const deletedImage = await DeleteImage(deletedAgenda.image_public_id);
 

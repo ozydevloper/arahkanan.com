@@ -54,7 +54,11 @@ const Tab = ({
 export const PopUpDeleteAgenda = ({
   agenda,
 }: {
-  agenda: Prisma.AgendaGetPayload<object>;
+  agenda: Prisma.AgendaGetPayload<{
+    include: {
+      user_relation: true;
+    };
+  }>;
 }) => {
   const setOnDelete = useAgendas((state) => state.setOnDelete);
   const setOnDetail = useAgendas((state) => state.setOnDetail);
@@ -87,11 +91,16 @@ export const PopUpDeleteAgenda = ({
           <button
             disabled={mutationDeleteAgenda.isPending}
             onClick={() =>
-              mutationDeleteAgenda.mutateAsync({ id: agenda.id }).then((e) => {
-                setOnDelete(null);
-                setOnDetail(null);
-                toast("Pesan", { description: e.message, closeButton: true });
-              })
+              mutationDeleteAgenda
+                .mutateAsync({
+                  id: agenda.id,
+                  user_id: agenda.user_relation.id,
+                })
+                .then((e) => {
+                  setOnDelete(null);
+                  setOnDetail(null);
+                  toast("Pesan", { description: e.message, closeButton: true });
+                })
             }
             className={`flex flex-1 bg-neutral-300 text-neutral-500 text-center items-center justify-center p-2 rounded-xl ${mutationDeleteAgenda.isPending ? "bg-red-500 text-white" : "hover:bg-red-500 hover:text-white active:bg-red-500 active:text-white transition-color ease-in-out duration-200"}`}
           >
@@ -180,6 +189,9 @@ export const DetailAgenda = ({
   const setOnDetail = useAgendas((state) => state.setOnDetail);
   const setOnDelete = useAgendas((state) => state.setOnDelete);
   const setOnUpdate = useAgendas((state) => state.setOnUpadate);
+
+  const onPublishing = useAgendas((state) => state.onPublishing);
+
   const dataUser = useUserSession((state) => state.dataUser);
 
   const router = useRouter();
@@ -228,7 +240,10 @@ export const DetailAgenda = ({
       <div className="w-full items-center px-3 md:px-25">
         <div className="w-full flex items-center justify-start gap-x-2 my-3">
           {((dataUser && dataUser.role === "SUDO") ||
-            (dataUser && dataUser.role === "SUPERUSER")) && (
+            (dataUser &&
+              dataUser.role === "SUPERUSER" &&
+              dataUser.id === agenda.user_id &&
+              onPublishing)) && (
             <>
               <button
                 disabled={mutationPublish.isPending}

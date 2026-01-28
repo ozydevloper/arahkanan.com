@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import prisma from "@/DB/db";
-import { RequestAgendaGet } from "@/dtype/request-item";
+import { RequestAgendaUnPublished } from "@/dtype/request-item";
 import { getAgendaUnpublished } from "@/lib/api-request";
 import { verifySignature } from "@/lib/signature";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,7 +23,9 @@ export async function POST(req: NextRequest) {
     });
     if (!!!cekSudo) throw new Error();
 
-    const body = (await req.json()) as RequestAgendaGet;
+    const body = (await req.json()) as RequestAgendaUnPublished;
+    body.id = cekSudo.id;
+    body.role = cekSudo.role;
     const agendas = await getAgendaUnpublished(body);
 
     return NextResponse.json({

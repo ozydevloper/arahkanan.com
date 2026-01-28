@@ -23,7 +23,10 @@ export async function PUT(req: NextRequest) {
         id: session.user.id,
       },
     });
+
     if (!!!cekSudo) throw new Error();
+    if (cekSudo.role !== "SUDO" && cekSudo.id !== formData.get("user_id"))
+      throw new Error();
 
     let image_public_id = null;
     let image_url = null;
@@ -37,7 +40,7 @@ export async function PUT(req: NextRequest) {
       image_url = uploadedImage.secure_url;
     }
 
-    const agenda: Omit<RequestAgendaUpdate, "image"> = {
+    const agenda: Omit<RequestAgendaUpdate, "image" | "user_id"> = {
       kategori_name: formData.get("kategori_name") as string | null,
       topik_name: formData.get("topik_name") as string | null,
       activity_time: formData.get("activity_time") as string | null,
