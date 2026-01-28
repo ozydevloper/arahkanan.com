@@ -77,7 +77,15 @@ export const ErrorContent = ({
 export const StateContent = ({
   contentQuery,
 }: {
-  contentQuery: UseQueryResult<ApiResponse<Prisma.AgendaGetPayload<object>[]>>;
+  contentQuery: UseQueryResult<
+    ApiResponse<
+      Prisma.AgendaGetPayload<{
+        include: {
+          user_relation: true;
+        };
+      }>[]
+    >
+  >;
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 relative gap-x-3 gap-y-10">

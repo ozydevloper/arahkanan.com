@@ -124,7 +124,15 @@ export const ContentAgenda = ({
   batch,
 }: {
   children: React.ReactNode;
-  contentAgenda: UseQueryResult<ApiResponse<Prisma.AgendaGetPayload<object>[]>>;
+  contentAgenda: UseQueryResult<
+    ApiResponse<
+      Prisma.AgendaGetPayload<{
+        include: {
+          user_relation: true;
+        };
+      }>[]
+    >
+  >;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   batch: number;
@@ -408,7 +416,15 @@ export const Content = () => {
   const focusTab = useAgendas((state) => state.focusTab);
   const setFocusTab = useAgendas((state) => state.setFocusTab);
 
-  const semuaAgenda = useQuery<ApiResponse<Prisma.AgendaGetPayload<object>[]>>({
+  const semuaAgenda = useQuery<
+    ApiResponse<
+      Prisma.AgendaGetPayload<{
+        include: {
+          user_relation: true;
+        };
+      }>[]
+    >
+  >({
     queryKey: [
       "semuaAgenda",
       {
@@ -424,7 +440,9 @@ export const Content = () => {
     enabled: focusTab === "Semua",
   });
 
-  const hariIni = useQuery<ApiResponse<Prisma.AgendaGetPayload<object>[]>>({
+  const hariIni = useQuery<
+    ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>[]>
+  >({
     queryKey: ["hariIni", { batchContent, pageHariIni }],
     queryFn: () =>
       apiFetch("/api/query/agenda/getAgendaHariIni", {
@@ -437,7 +455,9 @@ export const Content = () => {
     enabled: focusTab === "Hari Ini",
   });
 
-  const mingguIni = useQuery<ApiResponse<Prisma.AgendaGetPayload<object>[]>>({
+  const mingguIni = useQuery<
+    ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>[]>
+  >({
     queryKey: ["mingguIni", { batchContent, pageMingguIni }],
     queryFn: () =>
       apiFetch("/api/query/agenda/getAgendaMingguIni", {
