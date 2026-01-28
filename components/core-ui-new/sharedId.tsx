@@ -7,7 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import { DetailAgenda } from "./content/content";
 
 export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
-  const queryAgenda = useQuery<ApiResponse<Prisma.AgendaGetPayload<object>>>({
+  const queryAgenda = useQuery<
+    ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>>
+  >({
     queryKey: ["agendaShared"],
     queryFn: () =>
       apiFetch("/api/query/agenda/getById", {

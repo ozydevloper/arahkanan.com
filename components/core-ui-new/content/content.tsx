@@ -191,7 +191,7 @@ export const DetailAgenda = ({
   agenda,
   closeButton = true,
 }: {
-  agenda: Prisma.AgendaGetPayload<object>;
+  agenda: Prisma.AgendaGetPayload<{ include: { user_relation: true } }>;
   closeButton?: boolean;
 }) => {
   const setOnDetail = useAgendas((state) => state.setOnDetail);

@@ -54,7 +54,7 @@ export default function SearchBar({
   });
 
   const queryAgendaCari = useQuery<
-    ApiResponse<Prisma.AgendaGetPayload<object>[]>
+    ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>[]>
   >({
     queryKey: [
       "agendaCari",
