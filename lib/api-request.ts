@@ -443,9 +443,6 @@ export async function getAgendaUnpublished(
       createdAt: "desc",
     },
     where: {
-      date: {
-        gte: hariIni.gt,
-      },
       published: false,
       ...(optionGetAgendas.role !== "SUDO" && {
         user_id: optionGetAgendas.id,
@@ -463,9 +460,6 @@ export async function getAgendaUnpublished(
       createdAt: "desc",
     },
     where: {
-      date: {
-        gte: hariIni.gt,
-      },
       published: false,
       ...(optionGetAgendas.role !== "SUDO" && {
         user_id: optionGetAgendas.id,
