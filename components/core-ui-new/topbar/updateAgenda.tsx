@@ -4,7 +4,12 @@ import { ApiResponse } from "@/dtype/api_response";
 import { RequestAgendaUpdate } from "@/dtype/request-item";
 import { formatDate } from "@/lib/formatDate";
 import { apiFetch } from "@/lib/signature";
-import { useQuery, UseQueryResult, useMutation } from "@tanstack/react-query";
+import {
+  useQuery,
+  UseQueryResult,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Loader, RefreshCcw, X } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAgendas } from "@/lib/zustand";
@@ -75,12 +80,17 @@ export const UpdateAgenda = ({
     },
   });
 
+  const queryClient = useQueryClient();
+
   const mutationAgenda = useMutation({
     mutationFn: (formData: FormData) =>
       apiFetch("/api/query/agenda/updateAgenda", {
         method: "PUT",
         body: formData,
       }).then((e) => e.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agenda"] });
+    },
   });
 
   const onSubmit: SubmitHandler<RequestAgendaUpdate> = (data) => {

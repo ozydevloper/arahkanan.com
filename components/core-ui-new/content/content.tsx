@@ -62,6 +62,7 @@ export const PopUpDeleteAgenda = ({
 }) => {
   const setOnDelete = useAgendas((state) => state.setOnDelete);
   const setOnDetail = useAgendas((state) => state.setOnDetail);
+  const queryClient = useQueryClient();
 
   const mutationDeleteAgenda = useMutation({
     mutationFn: (data: RequestAgendaDelete) =>
@@ -69,6 +70,7 @@ export const PopUpDeleteAgenda = ({
         method: "DELETE",
         body: JSON.stringify(data),
       }).then((e) => e.json()),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["agenda"] }),
   });
 
   return (
@@ -213,7 +215,7 @@ export const DetailAgenda = ({
         body: formData,
       }).then((e) => e.json()),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["unpublish"] });
+      queryClient.invalidateQueries({ queryKey: ["agenda"] });
       setOnDetail(null);
     },
   });

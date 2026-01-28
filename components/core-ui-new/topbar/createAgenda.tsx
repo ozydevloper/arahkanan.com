@@ -3,7 +3,12 @@ import { ApiResponse } from "@/dtype/api_response";
 import { RequestAgendaCreate } from "@/dtype/request-item";
 import { formatDate } from "@/lib/formatDate";
 import { apiFetch } from "@/lib/signature";
-import { useQuery, UseQueryResult, useMutation } from "@tanstack/react-query";
+import {
+  useQuery,
+  UseQueryResult,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { Loader, RefreshCcw, X } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useAgendas } from "@/lib/zustand";
@@ -56,7 +61,7 @@ export const CreateAgenda = ({
   onCreate: boolean;
 }) => {
   const setOnCreate = useAgendas((state) => state.setOnCreate);
-
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -83,6 +88,9 @@ export const CreateAgenda = ({
         method: "POST",
         body: formData,
       }).then((e) => e.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["agenda"] });
+    },
   });
 
   const onSubmit: SubmitHandler<RequestAgendaCreate> = (data) => {
