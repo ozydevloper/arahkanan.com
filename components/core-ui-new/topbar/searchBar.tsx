@@ -57,7 +57,8 @@ export default function SearchBar({
     ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>[]>
   >({
     queryKey: [
-      "agendaCari",
+      "agenda",
+      "cari",
       {
         batch: batchContent,
         page: pageSearch,

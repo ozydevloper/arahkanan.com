@@ -349,6 +349,7 @@ export default function Page() {
 
   const querySemuaAcara = useQuery({
     queryKey: [
+      "agenda",
       "semuaAgendaKelola",
       {
         all: true,

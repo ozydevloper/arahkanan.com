@@ -426,6 +426,7 @@ export const Content = () => {
     >
   >({
     queryKey: [
+      "agenda",
       "semuaAgenda",
       {
         batchContent,
@@ -443,7 +444,7 @@ export const Content = () => {
   const hariIni = useQuery<
     ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>[]>
   >({
-    queryKey: ["hariIni", { batchContent, pageHariIni }],
+    queryKey: ["agenda", "hariIni", { batchContent, pageHariIni }],
     queryFn: () =>
       apiFetch("/api/query/agenda/getAgendaHariIni", {
         method: "POST",
@@ -458,7 +459,7 @@ export const Content = () => {
   const mingguIni = useQuery<
     ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>[]>
   >({
-    queryKey: ["mingguIni", { batchContent, pageMingguIni }],
+    queryKey: ["agenda", "mingguIni", { batchContent, pageMingguIni }],
     queryFn: () =>
       apiFetch("/api/query/agenda/getAgendaMingguIni", {
         method: "POST",

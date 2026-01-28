@@ -12,7 +12,7 @@ export const PublishingBox = ({ onClick }: { onClick: () => void }) => {
   const [page, setPage] = useState<number>(1);
   const batch = 12;
   const queryAgendaUnpublish = useQuery({
-    queryKey: ["unpublish", { page: page, batch: batch }],
+    queryKey: ["agenda", "unpublish", { page: page, batch: batch }],
     queryFn: () =>
       apiFetch("/api/query/agenda/getAgendaUnpublished", {
         method: "POST",

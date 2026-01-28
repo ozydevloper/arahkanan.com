@@ -106,7 +106,7 @@ export const CreateAgenda = ({
   };
 
   const queryKota = useQuery<ApiResponse<Prisma.KotaGetPayload<object>[]>>({
-    queryKey: ["semuaKota"],
+    queryKey: ["kota"],
     queryFn: () =>
       apiFetch("/api/query/item/kota/getAllItems", { method: "POST" }).then(
         (e) => e.json(),
@@ -115,7 +115,7 @@ export const CreateAgenda = ({
   });
 
   const queryBiaya = useQuery<ApiResponse<Prisma.BiayaGetPayload<object>[]>>({
-    queryKey: ["semuaBiaya"],
+    queryKey: ["biaya"],
     queryFn: () =>
       apiFetch("/api/query/item/biaya/getAllItems", {
         method: "POST",
@@ -126,7 +126,7 @@ export const CreateAgenda = ({
   const queryKategori = useQuery<
     ApiResponse<Prisma.KategoriGetPayload<object>[]>
   >({
-    queryKey: ["semuaKategori"],
+    queryKey: ["kategori"],
     queryFn: () =>
       apiFetch("/api/query/item/kategori/getAllItems", { method: "POST" }).then(
         (e) => e.json(),
@@ -135,7 +135,7 @@ export const CreateAgenda = ({
   });
 
   const queryTopik = useQuery<ApiResponse<Prisma.TopikGetPayload<object>[]>>({
-    queryKey: ["semuaTopik"],
+    queryKey: ["topik"],
     queryFn: () =>
       apiFetch("/api/query/item/topik/getAllItems", { method: "POST" }).then(
         (e) => e.json(),
@@ -146,7 +146,7 @@ export const CreateAgenda = ({
   const queryKalangan = useQuery<
     ApiResponse<Prisma.KalanganGetPayload<object>[]>
   >({
-    queryKey: ["semuaKalangan"],
+    queryKey: ["kalangan"],
     queryFn: () =>
       apiFetch("/api/query/item/kalangan/getAllItems", { method: "POST" }).then(
         (e) => e.json(),
