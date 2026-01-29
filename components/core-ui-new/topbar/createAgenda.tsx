@@ -72,7 +72,6 @@ export const CreateAgenda = ({
     defaultValues: {
       on: "1",
       date: new Date(),
-      time: "11:00 - 13:00 WIB",
       activity_time:
         "11:00 - 11:30 Pembukaan\n11:30 - 12:45 Isi\n12:45 - 13:00 Penutupan",
       pembicara: "- Pembicara 1\n- Pembicara 2\n- Pembicara 3",
@@ -294,8 +293,8 @@ export const CreateAgenda = ({
             durasi kegiatan.
           </p>
           <input
-            placeholder="Contoh: 08:00 - 09:00 WIB"
             id="time"
+            type="time"
             className={`outline-none border p-3 rounded-xl text-xs w-full ${errors.time ? "border-red-300 text-red-300" : ""}`}
             {...register("time", { required: true, minLength: 1 })}
           />
