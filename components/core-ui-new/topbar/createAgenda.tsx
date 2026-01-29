@@ -268,7 +268,7 @@ export const CreateAgenda = ({
             htmlFor="date"
             className={`text-sm font-bold ${errors.date ? "text-red-300" : ""}`}
           >
-            Tanggal - {formatDate(new Date(watch("date")))}
+            Tanggal - {formatDate(new Date(watch("date") ?? new Date()))}
           </label>
           <p className="text-xs text-muted-foreground">
             Tentukan tanggal pelaksanaan acara sesuai dengan jadwal yang telah

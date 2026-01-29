@@ -11,8 +11,7 @@ import { useAgendas, useUserSession } from "./zustand";
 import { UpdateAgenda } from "@/components/core-ui-new/topbar/updateAgenda";
 import { useSession } from "next-auth/react";
 import { CreateAgenda } from "@/components/core-ui-new/topbar/createAgenda";
-import { PublishingBox } from "@/components/core-ui-new/publishing-box";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 
 export default function Providers({
   children,
@@ -25,11 +24,9 @@ export default function Providers({
   const onDelete = useAgendas((state) => state.onDelete);
   const onCreate = useAgendas((state) => state.onCreate);
   const onUpdate = useAgendas((state) => state.onUpdate);
-  const onPublishing = useAgendas((state) => state.onPublishing);
 
   const setOnCreate = useAgendas((state) => state.setOnCreate);
   const setDataUser = useUserSession((state) => state.setDataUser);
-  const setOnPublishing = useAgendas((state) => state.setOnPublishing);
 
   const dataUser = useUserSession((state) => state.dataUser);
 
@@ -75,11 +72,6 @@ export default function Providers({
 
           <Portal typeFor="formUpdate" onOpen={!!onUpdate}>
             {!!onUpdate && <UpdateAgenda agenda={onUpdate} />}
-          </Portal>
-          <Portal onOpen={onPublishing} show="top" typeFor="publish">
-            {onPublishing && (
-              <PublishingBox onClick={() => setOnPublishing(!onPublishing)} />
-            )}
           </Portal>
         </>
       )}
