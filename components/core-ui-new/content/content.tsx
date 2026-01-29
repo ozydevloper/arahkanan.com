@@ -222,14 +222,19 @@ export const DetailAgenda = ({
 
   return (
     <div className="w-full h-fit rounded-b-2xl flex flex-col items-center justify-start bg-primary-foreground overflow-y-auto relative">
-      (
       <div
-        onClick={() => (closeButton ? router.push("/") : setOnDetail(null))}
+        onClick={() => {
+          if (onclose) {
+            setOnDetail(null);
+          } else {
+            router.push("/");
+          }
+        }}
         className="p-1 fixed right-5 z-1 top-5 rounded-xl hover:bg-red-500 hover:text-red-50 active:bg-red-700 active:text-red-200 transition-all ease-in-out duration-200"
       >
         <X size={25} />
       </div>
-      )
+
       <div className="w-full md:w-[1150px] h-[200px] md:h-[400px] relative overflow-hidden">
         <Image
           fill
