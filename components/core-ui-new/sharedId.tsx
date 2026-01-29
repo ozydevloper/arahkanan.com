@@ -6,6 +6,7 @@ import { apiFetch } from "@/lib/signature";
 import { useQuery } from "@tanstack/react-query";
 import { DetailAgenda } from "./content/content";
 import { useRouter } from "next/navigation";
+import NotFound from "@/app/not-found";
 
 export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
   const router = useRouter();
@@ -19,16 +20,15 @@ export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
         body: JSON.stringify({ id: idAgenda }),
       }).then((e) => e.json()),
   });
-  if (
-    queryAgenda.isError ||
-    !queryAgenda.data?.data.data ||
-    !queryAgenda.data.data.data.published
-  )
-    return router.push("/");
+
   return (
     <div>
       {queryAgenda.isLoading ? (
         <Loading />
+      ) : queryAgenda.isError ||
+        !queryAgenda.data?.data.data ||
+        !queryAgenda.data.data.data.published ? (
+        <NotFound />
       ) : (
         queryAgenda.isSuccess && (
           <DetailAgenda
