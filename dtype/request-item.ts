@@ -76,6 +76,8 @@ export interface RequestAgendaCreate {
   kalangan_name: string;
   published: boolean;
   user_id: string;
+  time_start?: string;
+  time_end?: string;
 }
 
 export interface RequestAgendaUpdate {

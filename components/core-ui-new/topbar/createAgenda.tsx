@@ -292,12 +292,34 @@ export const CreateAgenda = ({
             Masukkan rentang waktu pelaksanaan acara agar peserta memahami
             durasi kegiatan.
           </p>
-          <input
-            id="time"
-            type="time"
-            className={`outline-none border p-3 rounded-xl text-xs w-full ${errors.time ? "border-red-300 text-red-300" : ""}`}
-            {...register("time", { required: true, minLength: 1 })}
-          />
+          <div className="w-full flex items-center justify-between">
+            <div className="flex-1">
+              <label
+                htmlFor="time"
+                className={`text-sm font-bold ${errors.time_start ? "text-red-300" : ""}`}
+              >
+                Mulai
+              </label>
+              <input
+                type="time"
+                className={`outline-none border p-3 rounded-xl text-xs w-full ${errors.time ? "border-red-300 text-red-300" : ""}`}
+                {...register("time_start", { required: true, minLength: 1 })}
+              />
+            </div>
+            <div className="flex-1">
+              <label
+                htmlFor="time"
+                className={`text-sm font-bold ${errors.time_end ? "text-red-300" : ""}`}
+              >
+                Akhir
+              </label>
+              <input
+                type="time"
+                className={`outline-none border p-3 rounded-xl text-xs w-full ${errors.time ? "border-red-300 text-red-300" : ""}`}
+                {...register("time_end", { required: true, minLength: 1 })}
+              />
+            </div>
+          </div>
           <label
             htmlFor="activity_time"
             className={`text-sm font-bold ${errors.activity_time ? "text-red-300" : ""}`}

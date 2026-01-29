@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       on: formData.get("on") as string,
       pembicara: formData.get("pembicara") as string,
       penyelenggara: formData.get("penyelenggara") as string,
-      time: formData.get("time") as string,
+      time: `${formData.get("time_start") as string} - ${formData.get("time_end") as string}`,
       title: formData.get("title") as string,
       via_link: formData.get("via_link") as string | null,
       via_name: formData.get("via_name") as string | null,
