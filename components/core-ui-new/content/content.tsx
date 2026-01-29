@@ -222,14 +222,14 @@ export const DetailAgenda = ({
 
   return (
     <div className="w-full h-fit rounded-b-2xl flex flex-col items-center justify-start bg-primary-foreground overflow-y-auto relative">
-      {closeButton && (
-        <div
-          onClick={() => setOnDetail(null)}
-          className="p-1 fixed right-5 z-1 top-5 rounded-xl hover:bg-red-500 hover:text-red-50 active:bg-red-700 active:text-red-200 transition-all ease-in-out duration-200"
-        >
-          <X size={25} />
-        </div>
-      )}
+      (
+      <div
+        onClick={() => (closeButton ? router.push("/") : setOnDetail(null))}
+        className="p-1 fixed right-5 z-1 top-5 rounded-xl hover:bg-red-500 hover:text-red-50 active:bg-red-700 active:text-red-200 transition-all ease-in-out duration-200"
+      >
+        <X size={25} />
+      </div>
+      )
       <div className="w-full md:w-[1150px] h-[200px] md:h-[400px] relative overflow-hidden">
         <Image
           fill
@@ -246,7 +246,6 @@ export const DetailAgenda = ({
           priority
         />
       </div>
-
       <div className="w-full items-center px-3 md:px-25">
         <div className="w-full flex items-center justify-start gap-x-2 my-3">
           {((dataUser && dataUser.role === "SUDO") ||
