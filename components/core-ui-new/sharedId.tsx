@@ -5,8 +5,10 @@ import { ApiResponse } from "@/dtype/api_response";
 import { apiFetch } from "@/lib/signature";
 import { useQuery } from "@tanstack/react-query";
 import { DetailAgenda } from "./content/content";
+import { useRouter } from "next/navigation";
 
 export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
+  const router = useRouter();
   const queryAgenda = useQuery<
     ApiResponse<Prisma.AgendaGetPayload<{ include: { user_relation: true } }>>
   >({
@@ -17,11 +19,15 @@ export const DetailSharedId = ({ idAgenda }: { idAgenda: string }) => {
         body: JSON.stringify({ id: idAgenda }),
       }).then((e) => e.json()),
   });
+  if (
+    queryAgenda.isError ||
+    !queryAgenda.data?.data.data ||
+    !queryAgenda.data.data.data.published
+  )
+    return router.push("/");
   return (
     <div>
       {queryAgenda.isLoading ? (
-        <Loading />
-      ) : queryAgenda.isError || !queryAgenda.data?.data.data ? (
         <Loading />
       ) : (
         queryAgenda.isSuccess && (
