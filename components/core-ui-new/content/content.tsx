@@ -224,7 +224,7 @@ export const DetailAgenda = ({
     <div className="w-full h-fit rounded-b-2xl flex flex-col items-center justify-start bg-primary-foreground overflow-y-auto relative">
       <div
         onClick={() => {
-          if (onclose) {
+          if (closeButton) {
             setOnDetail(null);
           } else {
             router.push("/");
