@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-query";
 import { Loader, RefreshCcw, X } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useAgendas } from "@/lib/zustand";
+import { useAgendas, useUserSession } from "@/lib/zustand";
 import { ItemErorr, ItemLoading } from "./createAgenda";
 import { toast } from "sonner";
 
@@ -46,6 +46,9 @@ export const UpdateAgenda = ({
   const setOnUpdate = useAgendas((state) => state.setOnUpadate);
   const setOnDetail = useAgendas((state) => state.setOnDetail);
   const onUpdate = useAgendas((state) => state.onUpdate);
+
+  const dataUser = useUserSession((state) => state.dataUser);
+
   const {
     register,
     handleSubmit,
@@ -175,20 +178,31 @@ export const UpdateAgenda = ({
         onSubmit={handleSubmit(onSubmit)}
         className="w-full md:w-xl flex justify-start flex-col items-start gap-y-7"
       >
-        <span className="text-lg font-extrabold my-5">Update Acara</span>
-        <div className="flex items-start justify-start w-full flex-col">
-          <label htmlFor="published" className={`text-sm font-bold `}>
-            Publish
-          </label>
-          <select
-            id="published"
-            {...register("published")}
-            className="outline-none transition-all ease-in-out duration-200 shadow-md px-3 py-1 rounded-md text-sm font-bold "
-          >
-            <option value={"0"}>Jangan Publish</option>{" "}
-            <option value={"1"}>Publish</option>
-          </select>
+        <div className="my-5 flex flex-col items-start justify-start wrap-anywhere">
+          <span className="text-lg font-extrabold my-5">Update Acara</span>
+
+          <p className="text-xs text-muted-foreground">
+            Formulir ini digunakan untuk memperbarui informasi acara. Pastikan
+            seluruh data yang diubah tetap valid dan sesuai. Setelah proses
+            pembaruan disimpan, acara akan masuk ke tab Publishing untuk
+            menunggu peninjauan ulang oleh admin.
+          </p>
         </div>
+        {dataUser && dataUser.role === "SUDO" && (
+          <div className="flex items-start justify-start w-full flex-col">
+            <label htmlFor="published" className={`text-sm font-bold `}>
+              Publish
+            </label>
+            <select
+              id="published"
+              {...register("published")}
+              className="outline-none transition-all ease-in-out duration-200 shadow-md px-3 py-1 rounded-md text-sm font-bold "
+            >
+              <option value={"0"}>Jangan Publish</option>{" "}
+              <option value={"1"}>Publish</option>
+            </select>
+          </div>
+        )}
         <div className="flex items-start justify-start w-full flex-col">
           <label htmlFor="on" className={`text-sm font-bold `}>
             Pelaksanaan
@@ -202,7 +216,6 @@ export const UpdateAgenda = ({
             <option value={"0"}>Online</option>
           </select>
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="image"
@@ -219,7 +232,6 @@ export const UpdateAgenda = ({
             {...register("image")}
           />
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="title"
@@ -235,7 +247,6 @@ export const UpdateAgenda = ({
             {...register("title", { minLength: 1 })}
           />
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="deskripsi"
@@ -251,7 +262,6 @@ export const UpdateAgenda = ({
             {...register("description", { minLength: 1 })}
           />
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="date"
@@ -266,7 +276,6 @@ export const UpdateAgenda = ({
             {...register("date")}
           />
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="time"
@@ -294,7 +303,6 @@ export const UpdateAgenda = ({
             {...register("activity_time", { minLength: 1 })}
           />
         </div>
-
         {watch("on")!.toString() === "1" ? (
           <div className="flex items-start justify-start w-full flex-col">
             <label
@@ -379,7 +387,6 @@ export const UpdateAgenda = ({
             />
           </div>
         )}
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="pembicara"
@@ -395,7 +402,6 @@ export const UpdateAgenda = ({
             {...register("pembicara", { minLength: 1 })}
           />
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="penyelenggara"
@@ -411,7 +417,6 @@ export const UpdateAgenda = ({
             {...register("penyelenggara", { minLength: 1 })}
           />
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="biaya"
@@ -439,7 +444,6 @@ export const UpdateAgenda = ({
             )
           )}
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="kategori"
@@ -467,7 +471,6 @@ export const UpdateAgenda = ({
             )
           )}
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="topik"
@@ -495,7 +498,6 @@ export const UpdateAgenda = ({
             )
           )}
         </div>
-
         <div className="flex items-start justify-start w-full flex-col">
           <label
             htmlFor="kalangan"
@@ -523,7 +525,6 @@ export const UpdateAgenda = ({
             )
           )}
         </div>
-
         <button
           disabled={mutationAgenda.isPending}
           type="submit"
