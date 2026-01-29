@@ -179,7 +179,7 @@ export const UpdateAgenda = ({
         className="w-full md:w-xl flex justify-start flex-col items-start gap-y-7"
       >
         <div className="my-5 flex flex-col items-start justify-start wrap-anywhere">
-          <span className="text-lg font-extrabold my-5">Update Acara</span>
+          <span className="text-lg font-extrabold">Update Acara</span>
 
           <p className="text-xs text-muted-foreground">
             Formulir ini digunakan untuk memperbarui informasi acara. Pastikan
@@ -207,6 +207,11 @@ export const UpdateAgenda = ({
           <label htmlFor="on" className={`text-sm font-bold `}>
             Pelaksanaan
           </label>
+          <p className="text-xs text-muted-foreground">
+            Pilih metode pelaksanaan acara. Acara dapat diselenggarakan secara
+            Online melalui platform digital, atau Offline di lokasi yang telah
+            ditentukan.
+          </p>
           <select
             id="on"
             {...register("on")}
@@ -223,7 +228,10 @@ export const UpdateAgenda = ({
           >
             Gambar
           </label>
-
+          <p className="text-xs text-muted-foreground">
+            Unggah gambar yang merepresentasikan acara secara jelas dan menarik.
+            Gunakan gambar dengan kualitas baik agar mudah dipahami.
+          </p>
           <input
             accept="image/*"
             type="file"
@@ -239,7 +247,10 @@ export const UpdateAgenda = ({
           >
             Judul
           </label>
-
+          <p className="text-xs text-muted-foreground">
+            Masukkan judul acara yang singkat, jelas, dan mencerminkan inti
+            kegiatan yang akan diselenggarakan.
+          </p>
           <input
             placeholder="Isi Judul..."
             id="title"
@@ -254,6 +265,10 @@ export const UpdateAgenda = ({
           >
             Deskripsi
           </label>
+          <p className="text-xs text-muted-foreground">
+            Jelaskan detail acara secara lengkap, mencakup tujuan, gambaran umum
+            kegiatan, serta informasi penting yang perlu diketahui peserta.
+          </p>
           <textarea
             placeholder="Isi Deskripsi..."
             rows={5}
@@ -267,8 +282,12 @@ export const UpdateAgenda = ({
             htmlFor="date"
             className={`text-sm font-bold ${errors.date ? "text-red-300" : ""}`}
           >
-            Tanggal - {formatDate(new Date(watch("date") ?? ""))}
+            Tanggal - {formatDate(new Date(watch("date") ?? new Date()))}
           </label>
+          <p className="text-xs text-muted-foreground">
+            Tentukan tanggal pelaksanaan acara sesuai dengan jadwal yang telah
+            direncanakan.
+          </p>
           <input
             type="date"
             id="date"
@@ -283,6 +302,10 @@ export const UpdateAgenda = ({
           >
             Waktu Acara
           </label>
+          <p className="text-xs text-muted-foreground">
+            Masukkan rentang waktu pelaksanaan acara agar peserta memahami
+            durasi kegiatan.
+          </p>
           <input
             placeholder="Contoh: 08:00 - 09:00 WIB"
             id="time"
@@ -295,6 +318,10 @@ export const UpdateAgenda = ({
           >
             Kegiatan Sewaktu Acara
           </label>
+          <p className="text-xs text-muted-foreground">
+            Rincikan susunan kegiatan yang akan berlangsung selama acara,
+            disertai waktu pelaksanaannya.
+          </p>
           <textarea
             rows={5}
             placeholder="Contoh: 08:00 - 09:00 Pembukaan..."
@@ -311,6 +338,10 @@ export const UpdateAgenda = ({
             >
               Lokasi Acara
             </label>
+            <p className="text-xs text-muted-foreground">
+              Masukkan alamat lengkap tempat acara diselenggarakan agar peserta
+              mengetahui lokasi pelaksanaan secara jelas.
+            </p>
             <input
               placeholder="Contoh: Jln. Wijaya Kusuma, Sunter Jaya, Tanjung Priok"
               id="location_detail"
@@ -325,6 +356,10 @@ export const UpdateAgenda = ({
             >
               Link Google Map Acara
             </label>
+            <p className="text-xs text-muted-foreground">
+              Sertakan tautan Google Map untuk memudahkan peserta menemukan
+              lokasi acara secara akurat.
+            </p>
             <input
               placeholder="Contoh: https://google.com"
               id="location_url"
@@ -338,6 +373,9 @@ export const UpdateAgenda = ({
             >
               Kota Acara - <RefetchItem onClickRefetch={queryKota} />
             </label>
+            <p className="text-xs text-muted-foreground">
+              Pilih atau masukkan nama kota tempat acara berlangsung.
+            </p>
             {queryKota.isLoading || queryKota.isRefetching ? (
               <ItemLoading />
             ) : queryKota.isError ? (
@@ -366,6 +404,11 @@ export const UpdateAgenda = ({
             >
               Aplikasi Online
             </label>
+            <p className="text-xs text-muted-foreground">
+              Masukkan aplikasi atau platform yang akan digunakan untuk
+              pelaksanaan acara secara daring, seperti Zoom, Google Meet, atau
+              platform lainnya.
+            </p>
             <input
               placeholder="Contoh: Zoom, Google Meet..."
               id="via_name"
@@ -378,6 +421,10 @@ export const UpdateAgenda = ({
             >
               Link Aplikasi Online
             </label>
+            <p className="text-xs text-muted-foreground">
+              Masukkan tautan akses ke aplikasi online yang akan digunakan agar
+              peserta dapat bergabung ke acara dengan mudah.
+            </p>
             <input
               placeholder="Contoh: https://google.com"
               id="via_link"
@@ -394,6 +441,10 @@ export const UpdateAgenda = ({
           >
             Pembicara Acara
           </label>
+          <p className="text-xs text-muted-foreground">
+            Cantumkan nama pembicara utama atau tokoh yang akan menjadi
+            narasumber dalam acara ini.
+          </p>
           <textarea
             placeholder="Contoh: - Nama Pembicara 1"
             rows={5}
@@ -409,6 +460,9 @@ export const UpdateAgenda = ({
           >
             Penyelenggara Acara
           </label>
+          <p className="text-xs text-muted-foreground">
+            Masukkan nama pihak yang menyelenggarakan atau mendukung acara.
+          </p>
           <textarea
             placeholder="Contoh: - Nama Penyelenggara 1"
             rows={5}
@@ -424,6 +478,10 @@ export const UpdateAgenda = ({
           >
             Biaya Acara - <RefetchItem onClickRefetch={queryBiaya} />
           </label>
+          <p className="text-xs text-muted-foreground">
+            Pilih biaya pendaftaran acara sesuai opsi yang tersedia, seperti
+            gratis atau berbayar.
+          </p>
           {queryBiaya.isLoading || queryBiaya.isRefetching ? (
             <ItemLoading />
           ) : queryBiaya.isError ? (
@@ -451,6 +509,10 @@ export const UpdateAgenda = ({
           >
             Kategori Acara - <RefetchItem onClickRefetch={queryKategori} />
           </label>
+          <p className="text-xs text-muted-foreground">
+            Tentukan kategori acara agar mudah dikelompokkan dan ditemukan oleh
+            calon peserta.
+          </p>
           {queryKategori.isLoading || queryKategori.isRefetching ? (
             <ItemLoading />
           ) : queryKategori.isError ? (
@@ -478,6 +540,10 @@ export const UpdateAgenda = ({
           >
             Topik Acara - <RefetchItem onClickRefetch={queryTopik} />
           </label>
+          <p className="text-xs text-muted-foreground">
+            Masukkan topik utama yang akan dibahas dalam acara sesuai dengan
+            tema kegiatan.
+          </p>
           {queryTopik.isLoading || queryTopik.isRefetching ? (
             <ItemLoading />
           ) : queryTopik.isError ? (
@@ -505,6 +571,10 @@ export const UpdateAgenda = ({
           >
             kalangan Acara - <RefetchItem onClickRefetch={queryKalangan} />
           </label>
+          <p className="text-xs text-muted-foreground">
+            Tentukan sasaran peserta acara, misalnya pelajar, mahasiswa,
+            profesional, atau umum.
+          </p>
           {queryKalangan.isLoading || queryKalangan.isRefetching ? (
             <ItemLoading />
           ) : queryKalangan.isError ? (
@@ -525,17 +595,24 @@ export const UpdateAgenda = ({
             )
           )}
         </div>
-        <button
-          disabled={mutationAgenda.isPending}
-          type="submit"
-          className={`mb-10 w-full bg-neutral-300 text-neutral-500 flex item-center justify-center text-center p-3  rounded-2xl border-2 cursor-pointer shadow-md font-extrabold transition-all ease-in-out duration-200 ${mutationAgenda.isPending ? "bg-primary text-white" : "hover:bg-primary hover:text-white active:bg-primary active:text-white"}`}
-        >
-          {mutationAgenda.isPending ? (
-            <Loader className="animate-spin" />
-          ) : (
-            "Update"
-          )}
-        </button>
+        <div className="w-full flex flex-col items-center justify-center text-center mb-10 ">
+          <button
+            disabled={mutationAgenda.isPending}
+            type="submit"
+            className={`w-full mb-2 flex item-center justify-center text-center p-3  rounded-2xl border-2 cursor-pointer shadow-md font-extrabold transition-all ease-in-out duration-200 bg-primary text-white`}
+          >
+            {mutationAgenda.isPending ? (
+              <Loader className="animate-spin" />
+            ) : (
+              "Buat"
+            )}
+          </button>
+          <p className="text-xs text-muted-foreground">
+            Gunakan tombol Submit untuk menyimpan perubahan dan mengajukan
+            pembaruan acara. Setelah dikirim, acara akan masuk ke tab Publishing
+            dan menunggu proses peninjauan oleh admin.
+          </p>
+        </div>
       </form>
     </div>
   );
